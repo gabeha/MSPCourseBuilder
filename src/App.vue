@@ -4,8 +4,17 @@
       <div>
         <h1 class="font-bold text-lg m-4">First Course Choice</h1>
         <div class="flex flex-wrap justify-center items-center overflow-auto">
-          <div v-for="course in courses" :key="course.course_id">
-            <button class="bg-slate-50 outline-none rounded-md shadow-md m-1 px-3 py-1 hover:bg-slate-200 active:bg-slate-300 focus:outline-none focus:ring focus:ring-slate-600" @click="getAvailableCourses(course.course_id)">{{course.subject}}{{course.code}}</button>
+          <div v-for="course in courses" :key="course.course_id" >
+            <button :class = "(course.subject === 'BIO')?'bg-green-300'
+                              : (course.subject === 'CHE')?'bg-gray-300'
+                              : (course.subject === 'HUM')?'bg-purple-300'
+                              : (course.subject === 'INT')?'bg-cyan-300'
+                              : (course.subject === 'MAT')?'bg-red-300'
+                              : (course.subject === 'PHY')?'bg-blue-300'
+                              : (course.subject === 'NEU')?'bg-orange-300'
+                              :'bg-slate-50'"         
+            
+            class="outline-none rounded-md shadow-md m-1 px-3 py-1 hover:bg-slate-200 active:bg-slate-300 focus:outline-none focus:ring focus:ring-slate-600" @click="getAvailableCourses(course.course_id)">{{course.subject}}{{course.code}}</button>
           </div>
         </div>
       </div>
@@ -87,7 +96,9 @@ export default {
         .from('courses')
         .select()
       this.courses = response.data
-      // console.log(this.courses)
+      this.courses.sort((a, b) => a.subject.localeCompare(b.subject))
+
+      console.log(this.courses)
     },
     async getAvailableCourses(course_id) {
       this.course_id_1 = course_id;
@@ -102,6 +113,7 @@ export default {
 
       const response_courses = await supabase.rpc(`courses_${this.block_id_1}`);
       this.available_courses = response_courses.data;
+      this.available_courses.sort();
       // console.log(this.available_courses)
     },
     async getAvailablePracticals(course_id) {
