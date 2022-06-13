@@ -1,178 +1,178 @@
 <template>
-<div class="mx-40">
-    <div class="grid grid-cols-3 text-center">
-      <div>
-        <h1 class="font-bold text-lg m-4">First Course Choice</h1>
-        <div class="flex flex-wrap justify-center items-center overflow-auto">
-          <div v-for="course in courses" :key="course.course_id" >
-            <button :class = "(course.subject === 'BIO')?'bg-green-300'
-                              : (course.subject === 'CHE')?'bg-gray-300'
-                              : (course.subject === 'HUM')?'bg-purple-300'
-                              : (course.subject === 'INT')?'bg-cyan-300'
-                              : (course.subject === 'MAT')?'bg-red-300'
-                              : (course.subject === 'PHY')?'bg-blue-300'
-                              : (course.subject === 'NEU')?'bg-orange-300'
-                              :'bg-slate-50'"         
-            
-            class="outline-none rounded-md shadow-md m-1 px-3 py-1 hover:bg-slate-200 active:bg-slate-300 focus:outline-none focus:ring focus:ring-slate-600" @click="getAvailableCourses(course.course_id)">{{course.subject}}{{course.code}}</button>
-          </div>
+  
+
+      <div class="w-4/5 bg-gray-200 rounded-3xl mx-auto p-8">
+        <div class="grid cols-end-7 grid-flow-col grid-rows mx-auto">         
+              <button class="rounded-full inline p-4 m-3 w-34" v-for="module in modules" :key="module.id" :class="(module.subject === 'BIO') ? 'bg-green-500 col-start-1 col-span-1 row-span-1'
+                            : (module.subject === 'CHE') ? 'bg-teal-500 :hover col-start-2 col-span-1 '
+                            : (module.subject === 'PHY') ? 'bg-sky-500 col-start-3 col-span-1'
+                            : (module.subject === 'MAT') ? 'bg-red-400 col-start-4 col-span-1'
+                            : (module.subject === 'INT') ? 'bg-indigo-400 col-start-5 col-span-1'
+                            : (module.subject === 'NEU') ? 'bg-rose-300 col-start-6 col-span-1'
+                            :'bg-slate-600 col-start-7 col-span-1'" @click="matchModules(module.id, module.subject, module.code, module.start1, module.end1, module.start2, module.end2, module.start3, module.end3)">
+                <p class="font-bold text-white "> {{module.subject}}{{module.code}} </p></button>
         </div>
       </div>
 
       
-        <div>
-          <h1 class="font-bold text-lg m-4">Second Course Choice</h1>
-          <div class="flex flex-wrap justify-center items-center overflow-auto">
-            <TransitionGroup name="list" tag="ul" class="flex flex-wrap justify-center items-center overflow-hidden">
-              
-              <div v-for="course in available_courses" :key="course.f_course_id">
-              <button class="bg-slate-50 outline-none rounded-md shadow-md m-1 px-3 py-1 hover:bg-slate-200 active:bg-slate-300 focus:outline-none focus:ring focus:ring-slate-600" @click="getAvailablePracticals(course.f_course_id)">{{course.f_subject}}{{course.f_code}}</button>
-            </div>
-              
-            </TransitionGroup>
-          </div>
-        </div>
 
-      <div>
-        <h1 class="font-bold text-lg m-4">Practical Choice</h1>
-        <div class="flex flex-wrap justify-center items-center overflow-auto">
-        <div v-for="practical in practicals" :key="practical.f_practical_id">
-          <button class="bg-slate-50 outline-none rounded-md shadow-md m-1 px-3 py-1 hover:bg-slate-200 active:bg-slate-300 focus:outline-none focus:ring focus:ring-slate-600" @click="logChoices(practical.f_practical_id)">{{practical.f_subject}}{{practical.f_code}}</button>
-        </div>
-        </div>
-        </div>  
-  </div>
-
-  <div class="flex justify-center items-center flex-col">
-    <h1 class="font-bold text-lg m-4">Your choices:</h1>
-    <div v-for="course in chosen_courses" :key="course.course_id">
-        <div>
-          <h3>{{course.subject}}{{course.code}}</h3>
-        </div>
-    </div>
-    <div v-for="practical in chosen_practicals" :key="practical.practicals_id">
-        <div>
-          <h3>{{practical.subject}}{{practical.code}}</h3>
-        </div>
-    </div>
-
-  </div>
-</div>
+      <div v-for="(choice, index) in choices" :key="index">
+        {{choice.subject}}{{choice.code}}
+      </div>
 </template>
 
+
 <script>
-// import { ref } from "vue"
 import { supabase } from "./supabase.js"
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 
-
+const moment = extendMoment(Moment);
 export default {
   name: 'App',
   components: {
-    
   },
   data() {
     return {
-      chosen_block: 1,
-      block_id_1: null,
-      block_id_2: null,
-      course_id_1: null,
-      course_id_2: null,
-      practical_id: null,
+      modules: [],
       courses: [],
-      available_courses: [],
       practicals: [],
-
-      chosen_courses: [],
-      chosen_practicals: []
+      choices: []
     }
   },
   mounted() {
-    this.fetchAllCourses();
-    
+    this.matchModules()
+    // this.retrieveTest();
+    this.fetchAllModules();
+    // this.fetchAllCourses();
+    // this.fetchAllPracticals();
   },
   methods: {
     async fetchAllCourses() {
       const response = await supabase
         .from('courses')
         .select()
-      this.courses = response.data
-      this.courses.sort((a, b) => a.subject.localeCompare(b.subject))
-
-      console.log(this.courses)
+      this.courses = response.data;
     },
-    async getAvailableCourses(course_id) {
-      this.course_id_1 = course_id;
-      const response_block = await supabase
-        .from('courses_join_practicals')
-        .select('block_id')
-        .eq('course_id', course_id);
-
-      this.block_id_1 = response_block.data[0].block_id;
-
-      // console.log(this.block_id_1)
-
-      const response_courses = await supabase.rpc(`courses_${this.block_id_1}`);
-      this.available_courses = response_courses.data;
-      this.available_courses.sort();
-      // console.log(this.available_courses)
-    },
-    async getAvailablePracticals(course_id) {
-      this.course_id_2 = course_id;
-      const response_block = await supabase
-        .from('courses_join_practicals')
-        .select('block_id')
-        .eq('course_id', course_id);
-
-      // console.log(response_block)
-      this.block_id_2 = response_block.data[0].block_id;
-
-      // console.log(this.block_id_2)
-
-      if (this.block_id_1 < this.block_id_2) {
-        const response = await supabase.rpc(`practicals_${this.block_id_1}_${this.block_id_2}`);
-        this.practicals = response.data;
+    matchModules(id, subject, code, start1, end1, start2, end2, start3, end3) {
+      if (subject == 'PRA') {
+        this.modules = this.modules.filter(function(practical) {
+         return practical.subject !== 'PRA'
+        })
+        this.modules = this.modules.filter(function(course){
+          const rc1 = moment.range(course.start1, course.end1)
+          const rc2 = moment.range(course.start2, course.end2)
+          const rp1 = moment.range(start1, end1)
+          // console.log(start2!==null)
+          if (start3 !== null) {
+            const rp2 = moment.range(start2, end2);
+            const rp3 = moment.range(start3, end3);
+            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) 
+            || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) 
+            || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+          }
+          if ((start3 == null) && (start2 !== null)) {
+            const rp2 = moment.range(start2, end2);
+            // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+            console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+          
+            return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+            // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+          }
+          if (start2 == null) {
+            // console.log(rp1)
+            // console.log(rc2.overlaps(rp1))
+            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+          }
+        })
       }
       else {
-        const response = await supabase.rpc(`practicals_${this.block_id_2}_${this.block_id_1}`);
-        this.practicals = response.data;
+        this.modules = this.modules.filter(function(course) {
+          const rc1 = moment.range(course.start1, course.end1)
+          const rc2 = moment.range(course.start2, course.end2)
+          const rp1 = moment.range(start1, end1);
+          const rp2 = moment.range(start2, end2);
+          return (!(rc1.overlaps(rp1) || rc1.overlaps(rp2)) || !(rc2.overlaps(rp1) || rc2.overlaps(rp2)))
+        })
+        this.modules = this.modules.filter(function(course){
+          const rc1 = moment.range(start1, end1)
+          const rc2 = moment.range(start2, end2)
+          const rp1 = moment.range(course.start1, course.end1)
+          // console.log(start2!==null)
+          if (course.start3 !== null) {
+            const rp2 = moment.range(course.start2, course.end2);
+            const rp3 = moment.range(course.start3, course.end3);
+            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) 
+            || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) 
+            || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+          }
+          if ((course.start3 == null) && (course.start2 !== null)) {
+            const rp2 = moment.range(course.start2, course.end2);
+            // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+            console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+          
+            return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+            // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+          }
+          if (course.start2 == null) {
+            // console.log(rp1)
+            // console.log(rc2.overlaps(rp1))
+            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+          }
+        })
       }
-
-      console.log(this.practicals)
+      this.addChoice(id, subject, code);
     },
-    async logChoices(practical_id) {
-      this.practical_id = practical_id;
-      const response_c = await supabase
-        .from('courses')
-        .select()
-        .or(`course_id.eq.${this.course_id_1}, course_id.eq.${this.course_id_2}`)
-
-      // console.log(response_c)
-      this.chosen_courses = response_c.data;
-
-      const response_p = await supabase
+    async fetchAllPracticals() {
+      const response = await supabase
         .from('practicals')
         .select()
-        .eq('practical_id', this.practical_id)
-
-      this.chosen_practicals = response_p.data;
-
-      // console.log(this.chosen_courses)
-      console.log(this.chosen_practicals)
-    }
-    }
+      this.practicals = response.data;
+    },
+    async fetchAllModules() {
+      const response = await supabase
+        .from('modules')
+        .select()
+      this.modules = response.data;
+      this.modules.forEach(element => {
+        element.start1 = new Date(element.start1);
+        element.end1 = new Date(element.end1);
+        if (element.start2 != null) {
+          element.start2 = new Date(element.start2);
+          element.end2 = new Date(element.end2);
+        }
+        if (element.start3 != null) {
+          element.start3 = new Date(element.start3);
+          element.end3 = new Date(element.end3);
+        }
+      });
+      console.log(this.modules)
+    },
+    addChoice(id, subject, code) {
+      const choice = {
+        id: id,
+        subject: subject,
+        code: code
+      };
+      this.choices = [...this.choices, choice]
+      // console.log(this.choices);
+    },
   }
+}
 </script>
-
-<style>
-
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-</style>

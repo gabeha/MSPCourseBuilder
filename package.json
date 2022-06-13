@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.35.3",
+    "moment": "^2.29.3",
+    "moment-range": "^4.0.2",
     "vue": "^3.2.25"
   },
   "devDependencies": {
