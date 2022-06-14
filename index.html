@@ -31,11 +31,12 @@
 <!-- title section -->
 <section id="course name">  
       <!--Flex container -->
-      <div class="container flex flex-col-reverse md:flex-row items-center px-6 mx-auto space-y-0 md:space-y-0 py-10">
+      <div class="flex md:flex-row items-center px-6 mx-auto justify-center py-10">
             <!-- Course name -->
-            <div class="flex mb-22 space-y-12 md:w-1/2">
-                <h1 class="mx-auto text-4xl text-center font-bold text-sky-900">Organic Chemistry</h1>
-                    <h2 class="text-2xl text-center font-bold text-sky-700">CHE2001</h2>        
+            <div class="flex flex-col mb-22 md:w-1/2">
+                <h1 class="flex flex-col mx-auto text-4xl text-center font-bold text-sky-900 items-center justify-center">Organic Chemistry</h1>
+                <h2 class="flex text-2xl text-center font-bold text-sky-700 items-center justify-center mt-4">CHE2001</h2>  
+              
             </div>
             
       </div>
@@ -43,56 +44,79 @@
 
 <!-- description section -->
 <section >
-    <div class="flex">
-    <div id="hero section" class="px-7 bg-sky-200">
-     <!-- Flex container -->
-            <div class=" pt-5 text-2xl text-left font-bold text-sky-700 rounded-md">
-                <h2>Pre-requisites</h2>
+    <!-- entire thingy -->
+    <div class="flex flex-col">
+        <!-- top part -->
+        <div id="hero section" class="flex pb-2">
+            <!-- top left -->
+            <div id="topleft" class="ml-40 bg-white w-2/5">
+            <div class=" pt-5 text-2xl text-left font-bold text-sky-900 rounded-md">
+                <h2 class="">Pre-requisites</h2>
                 <ul class="list-disc list-inside text-sky-700 text-sm">
                     <li>CHE1001</li>
                 </ul>
             </div>
 
-            <div class="mx-auto py-5 text-2xl text-left font-bold text-sky-700 rounded-md">
+            <div class="mx-auto py-5 text-2xl text-left font-bold text-sky-900 rounded-md">
                 <h2>Co-requisites</h2>
                 <ul class="list-disc list-inside text-left text-sky-700 text-sm">
                     <li>Chemical Synthesis</li>
                 </ul>
             </div>
 
-            <div class="mx-auto py-5 text-2xl text-left font-bold text-sky-700 rounded-md">
+            <div class="mx-auto text-2xl text-left font-bold text-sky-900 rounded-md">
                     <h2>Assessment</h2>
                     <ul class="list-disc list-inside text-left text-sky-700 text-sm">
                         <li>Midterm</li>
                         <li>Final</li>
                         <li>Tutorial Participation</li>
-
                     </ul>
-
-
             </div>
-
-            <div class="mx-auto py-5 text-2xl text-left font-bold text-sky-700 rounded-md ">
-                <h2>Course Description</h2>
-            <p class=" my-3 mx-auto text-left text-xs text-sky-500">This course focuses on the basis of organic chemistry. In the first part of the course, important 
-                fundamental topics, such as atomic theory, bonding theory, hybridization, molecular orbital theory and 
-                resonance will be discussed. A special topic will be stereochemistry, which is an essential topic in organic 
-                chemistry and the life sciences, since stereochemistry often determines the activity of biological 
-                compounds or medicines. Subsequently, the course continues with an introduction into reactivity of 
-                organic molecules. Focus, will be on a selection of fundamental organic reactions, which form the basis 
-                for a wide array of other organic reactions. To this end, a logical review will be provided of the reactivity 
-                of the most important functional groups, as applied in organic synthesis</p>
             </div>
+            
+        <div class="w-3/5 flex items-center justify-center">
+            <div class=" pt-5 text-2xl text-center mr-40 my-4 font-bold text-sky-900 rounded-md bg-gray-100 h-full drop-shadow-xl w-1/2 ">
+                <h2>Course Info</h2>
+                <p class="ml-4 mt-3 mx-auto text-left text-sky-800 text-xs">Course Coordinator Name:
+                    </p>
+                <p class="ml-4 mx-auto text-left text-sky-700 text-xs"> Period 1: Dr. Matt Baker, Faculty of Health, Medicine and Life Sciences, MERLN <br> Period 4: Dr. Hanne Diliën, Faculty of 
+                    Science and Engineering, Maastricht Science Programme.</p>
+                    <p class="ml-4 mt-3 mx-auto text-left text-sky-800 text-xs">Course Coordinator Email:
+                        </p>
+                <p class="ml-4 mx-auto text-left text-sky-700 text-xs"> m.baker@maastrichtuniversity.nl <br> hanne.dilien@maastrichtuniversity.nl
+                </p>
+                <p class="ml-4 mt-3 mx-auto text-left text-sky-800 text-xs">Literature:
+                </p>
+                <p class="ml-4 mx-auto text-left text-sky-700 text-xs">Klein; “Organic Chemistry”; 2th edition or 3rd edition; Wiley (ISBN: 9781118452288/978-1119110477).</p>
+            </div>
+        </div>
+        </div>
+
+
+    <div class="ml-40 post w-1/2">
+        <div class="mx-auto py-5 text-2xl text-left font-bold text-sky-900 rounded-md bg-white ">
+            <h2>Course Description</h2>
+        <p class=" my-1 mx-auto text-justify text-xs text-sky-700">This course focuses on the basis of organic chemistry. In the first part of the course, important 
+            fundamental topics, such as atomic theory, bonding theory, hybridization, molecular orbital theory and 
+            resonance will be discussed. A special topic will be stereochemistry, which is an essential topic in organic 
+            chemistry and the life sciences, since stereochemistry often determines the activity of biological 
+            compounds or medicines. Subsequently, the course continues with an introduction into reactivity of 
+            organic molecules. Focus, will be on a selection of fundamental organic reactions, which form the basis 
+            for a wide array of other organic reactions. To this end, a logical review will be provided of the reactivity 
+            of the most important functional groups, as applied in organic synthesis.
+        
+        </p>
+           <h1>Read More Test</h1> 
+           <p class="text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum at totam distinctio perferendis ea, voluptates rem a deleniti corrupti sapiente aliquam vero sunt necessitatibus veritatis nemo illo debitis reiciendis magnam tenetur saepe numquam maxime, temporibus odio!
+            <span class="moreText hidden">
+                Minus facere cumque ipsa vitae consequuntur sed dolores quod numquam ut modi saepe ea suscipit quibusdam enim eligendi dicta, eaque voluptas nisi dolore, aliquam nostrum pariatur tenetur. Fugiat illo tempora eligendi natus ratione tempore odit quos, optio vero dignissimos amet rerum quasi eos, dicta sint? Enim quasi necessitatibus voluptate mollitia qui harum quia quis! Aspernatur nihil dignissimos quis velit. Blanditiis quidem accusamus quod nam?</span></p>
+                <button class="read-more-btn">Read More</button>
+
+                
+        </div>
     </div>
 
-    
-    <div class=" pt-5 text-2xl text-center font-bold text-sky-700 rounded-md bg-sky-300">
-        <h2>Course Info</h2>
-    <p class="mx-auto text-left text-sky-700 text-sm">Course Coordinator Name:</p>
     </div>
-
-    </div>
-</div>
 </section>
 
 
@@ -149,5 +173,10 @@
 
 </footer>
 
+
+<!-- Script -->
+<script src="js/script.js">
+
+</script>
 </body>
 </html>
