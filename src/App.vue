@@ -3,7 +3,7 @@
     <div class="max-w-max my-1" v-for="m in modules" :key="m.id">
       <button 
       class="bg-slate-300 shadow-lg px-4 py-2 rounded-full hover:bg-slate-100" 
-      @click="matchModules(m.id, m.subject, m.code, m.start1, m.end1, m.start2, m.end2, m.start3, m.end3)">
+      @click="matchModules(m)">
       {{m.subject}}{{m.code}}
       </button>
     </div>
@@ -77,82 +77,23 @@ where each pair corresponds to day of the week and the specific timeslot
 
 @returns:  all of the options available after the selection has been made
 
-TODO: assert that no more than two practicals can be available for selection
+TODO: assert that no more than two courses can be available for selection
 TODO: refactor! the functions used for filtering can be extracted to improve readability
 */
 
-    matchModules(id, subject, code, start1, end1, start2, end2, start3, end3) {
+    matchModules(selectedModule) {
 
       // ----- Scenario 1: Practical was selected, show all courses available for selection
 
-      if (subject == 'PRA') {
+      if (selectedModule.subject == 'PRA') {
 
         // Step 1: remove all other practicals from availability list
         this.modules = this.modules.filter(function(practical) {
          return practical.subject !== 'PRA'
         })
+
         // Step 2: compare timeslot for each course in the availability list and remove overalapping ones
-        this.modules = this.modules.filter(function(course){
-
-          // get timeslots for the course in the table of available courses 
-          const rc1 = moment.range(course.start1, course.end1)
-          const rc2 = moment.range(course.start2, course.end2)
-
-          // get the timeslot for the first day when the practical is offered
-          const rp1 = moment.range(start1, end1)
-
-          // console.log(start2!==null)
-
-          // if practical is offered on three days (i.e Monday, Tuesday or Wednesday) 
-          if (start3 !== null) {
-
-            // get the timeslots for the second and third days when the practical is offered
-            const rp2 = moment.range(start2, end2);
-            const rp3 = moment.range(start3, end3);
-
-            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) 
-            || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
-
-            // check all three practical days against both course days
-            // if all overlap -> filter the course out
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) 
-            || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
-          }
-
-          // if practical is offered on two days (i.e Monday or Wednesday) 
-          if ((start3 == null) && (start2 !== null)) {
-
-            // get the timeslot for the second day when the practical is offered
-            const rp2 = moment.range(start2, end2);
-
-            // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
-            // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-
-            console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
-          
-            // check all both practical days against both course days
-            // if all overlap -> filter the course out
-            return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-
-            // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-          }
-
-          // if practical is only offered on one day
-          if (start2 == null) {
-            // console.log(rp1)
-            // console.log(rc2.overlaps(rp1))
-
-            // check if practical overlaps with course days
-            // if both overlap -> filter course out
-            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
-          }
-        })
+        this.modules = this.modules.filter(courseInTheTable => filterOutPractical(courseInTheTable, selectedModule))
       }
 
       // ----- Scenario 2: Course was selected, show all practicals and courses available for selection
@@ -162,64 +103,19 @@ TODO: refactor! the functions used for filtering can be extracted to improve rea
         this.modules = this.modules.filter(function(course) {
 
         // get timeslots for the course from the list of available courses
-          const rc1 = moment.range(course.start1, course.end1)
-          const rc2 = moment.range(course.start2, course.end2)
+          const rangeCourseDay1 = moment.range(course.start1, course.end1)
+          const rangeCourseDay2 = moment.range(course.start2, course.end2)
 
         // get timeslots of the course that was selected (input course)
-          const rp1 = moment.range(start1, end1);
-          const rp2 = moment.range(start2, end2);
+          const rangePracticalDay1 = moment.range(selectedModule.start1, selectedModule.end1);
+          const rangePracticalDay2 = moment.range(selectedModule.start2, selectedModule.end2);
 
           // if at least one timeslot overlaps -> remove course
-          return (!(rc1.overlaps(rp1) || rc1.overlaps(rp2)) || !(rc2.overlaps(rp1) || rc2.overlaps(rp2)))
+          return (!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay1.overlaps(rangePracticalDay2)) || !(rangeCourseDay2.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay2)))
         })
 
         // show all available practicals
-        this.modules = this.modules.filter(function(course){
-
-          // get timeslots of the course that was selected (input course)
-          const rc1 = moment.range(start1, end1)
-          const rc2 = moment.range(start2, end2)
-
-           // get the timeslot for the first day when the practical is offered
-          const rp1 = moment.range(course.start1, course.end1)
-          // console.log(start2!==null)
-
-          // EXACTLY THE SAME AS FILTERING ABOVE --> SHOULD BE ABSTRACTED INTO SEPARATE FUNCTION 
-          if (course.start3 !== null) {
-            const rp2 = moment.range(course.start2, course.end2);
-            const rp3 = moment.range(course.start3, course.end3);
-
-            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) 
-            || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
-
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) 
-            || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
-          }
-          if ((course.start3 == null) && (course.start2 !== null)) {
-            const rp2 = moment.range(course.start2, course.end2);
-
-            // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
-            // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-
-            console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
-          
-            return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-
-            // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-          }
-          if (course.start2 == null) {
-            // console.log(rp1)
-            // console.log(rc2.overlaps(rp1))
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
-            console.log("I can't push shit to a remote branch if only comments were added :c --Liza")
-            const removable  = 2;
-          }
-        })
+        this.modules = this.modules.filter(practicalInTheTable => filterOutPractical(selectedModule, practicalInTheTable))
       }
       this.addChoice(id, subject, code);
     },
@@ -259,6 +155,49 @@ TODO: refactor! the functions used for filtering can be extracted to improve rea
       this.choices = [...this.choices, choice]
       // console.log(this.choices);
     },
+
+    /* @requires: practical input and course input, one of which will correspond to the selected module 
+    and the other will represent the module object passed in by the filter function, as per selectedModule() function
+    */
+    filterOutPractical(course, practical){
+      {   
+          // get timeslots of the course 
+          const rangeCourseDay1 = moment.range(course.start1, course.end1)
+          const rangeCourseDay2 = moment.range(course.start2, course.end2)
+
+           // get the timeslot for the first day when the practical is offered
+          const rangePracticalDay1 = moment.range(practical.start1, practical.end1)
+
+          // if the practical is only offered on one day
+           if (practical.start2 == null) 
+           {
+            return (!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay1)))
+          }
+
+          // if the practical is offered on two different days
+          if ((practical.start3 == null) && (practical.start2 !== null)) {
+            const rangePracticalDay2 = moment.range(practical.start2, practical.end2);
+
+            return(!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay1)) 
+            || !(rangeCourseDay1.overlaps(rangePracticalDay2) || rangeCourseDay2.overlaps(rangePracticalDay2)))
+
+          }
+
+          // if the practical is offered on three different days
+          if (practical.start3 !== null) {
+            const rangePracticalDay2 = moment.range(practical.start2, practical.end2);
+            const rangePracticalDay3 = moment.range(practical.start3, practical.end3);
+
+            return (!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay1)) 
+            || !(rangeCourseDay1.overlaps(rangePracticalDay2) || rangeCourseDay2.overlaps(rangePracticalDay2)) 
+            || !(rangeCourseDay1.overlaps(rangePracticalDay3) || rangeCourseDay2.overlaps(rangePracticalDay3)))
+          }
+
+      
+         
+        }
+    }
+
   }
 }
 </script>
