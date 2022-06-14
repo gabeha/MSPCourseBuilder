@@ -1,0 +1,265 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link href="/dist/output.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="input.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+  <title>sidebar</title>
+  <style>
+    ::-webkit-scrollbar{
+      width: 10px;
+    }
+    ::-webkit-scrollbar-thumb{
+      border-radius: 5px;
+      background-color: #9E9E9E;
+    }
+  </style>
+</head>
+<body class="bg-white font-sans">
+  <nav class="relative p-2 px-10 py-2 bg-[#000924]">
+    <!--Flexcontainer-->
+        <div class="flex items-center justify-between">
+            <!-- Logo -->
+            <div class="pt-2">
+                <img src="" class="w-12" alt=""> 
+            </div>
+  
+                <div id="navbarselection" class="items-center hidden md:flex space-x-14 text-white">
+                <a href="#" class="hover:text-amber-600">Course Builder</a> 
+                <a href="#" class="hover:text-amber-600">Wiki</a>
+                <a href="#" class="hover:text-amber-600">About Us</a>
+                <a href="#" class="hover:text-amber-600">FAQ</a>
+                </div>
+               
+                <!--button-->
+                <a href="#" class="p-3 px-6 py-3 text-white bg-amber-600 rounded-full baseline hover:bg-sky-800">
+                  Start now
+                </a>
+        
+    </div>
+  </nav>
+
+
+  <span class="absolute text-white text-4xl top-3 left-3 cursor-pointer" onclick="Open()">
+    <i class="bi bi-list bg-gray-900 rounded-md px-2 lg:hidden"></i>
+  </span>
+ <!-- Sidebar -->
+  <div class="sidebar fixed top-16 bottom-0 lg:left-0 left-[-300px] p-2 w-[300px] overflow-y-auto text-center bg-[#000924] z-10 ">
+    <!-- Top part menu -->
+    <div class="text-white text-xl">
+      <div class="p-2.5 mt-1 flex items-center">
+        <i class="bi bi-app-indicator px-2 py-1 bg-amber-600 rounded-md"></i>
+        <h1 class="font-bold text-gra-200 text-[15px] ml-3">
+            Courses
+        </h1>
+        <i class="bi bi-x ml-24 cursor-pointer lg:hidden rounded-md hover:bg-amber-600" onclick="Open()"></i> 
+      </div>
+      <hr class="my-2 text-gray-600">
+    </div>
+    
+    <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">
+     <i class="bi bi-search text-sm"></i>
+     <input type="text" id="search" placeholder="Find your course" class="text-[15px] ml-4 w-full bg-transparent focus:outline-none">
+    </div>
+    <div id="match-list" class="text-white rounded-md"></div>
+
+    <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600">
+      <i class="bi bi-house-door-fill text-sm"></i>
+      <span class="text-[15px] ml-4 text-gray-200">Home</span>
+           
+    </div>
+    <div class="p-2.5 mt-3 md:hidden flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600">
+      <i class="bi bi-house-door-fill text-sm"></i>
+      <span class="text-[15px] md:hidden ml-4 text-gray-200">Course Builder</span>
+    </div>
+    <div class="p-2.5 mt-3 md:hidden flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600">
+      <i class="bi bi-house-door-fill text-sm"></i>
+      <span class="text-[15px] md:hidden ml-4 text-gray-200">Wiki</span>
+    </div>
+    <div class="p-2.5 mt-3 md:hidden flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600">
+      <i class="bi bi-house-door-fill text-sm"></i>
+      <span class="text-[15px] md:hidden ml-4 text-gray-200">About Us</span>
+    </div>
+    <div class="p-2.5 mt-3 md:hidden flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600">
+      <i class="bi bi-house-door-fill text-sm"></i>
+      <span class="text-[15px] md:hidden ml-4 text-gray-200">FAQ</span>
+    </div>
+
+    <!-- Physics Courses -->
+    <hr class="my-2 text-gray-600">
+    <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600" onclick="dropdown('physics')">
+      <i class="bi bi-hurricane text-sm"></i>
+      <div class="flex justify-between w-full items-center">
+        <span class="text-[15px] ml-4 text-gray-200">Physics Courses</span>
+        <span class="text-sm" id="arrow-physics">
+          <i class="bi bi-chevron-down"></i>
+        </span>
+        
+      </div>
+    </div>
+    <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-white" id="submenu-physics">
+      <h1 class="cursor-pointer p-2 hover:bg-gray-500 rounded-md mt-1">PHY2001 - Classical mechanics</h1>
+    </div>
+    <!-- Math Courses -->
+    <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600" onclick="dropdown('math')">
+      <i class="bi bi-123 text-sm"></i>
+      <div class="flex justify-between w-full items-center">
+        <span class="text-[15px] ml-4 text-gray-200">Math Courses</span>
+        <span class="text-sm" id="arrow-math">
+          <i class="bi bi-chevron-down"></i>
+        </span>
+       
+      </div>
+    </div>
+    <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-white" id="submenu-math">
+      <h1 class="cursor-pointer p-2 hover:bg-gray-500 rounded-md mt-1">PHY2001 - Classical mechanics</h1>
+    </div>
+    <!-- Chemistry Courses -->
+    <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600" onclick="dropdown('chemistry')">
+      <i class="bi bi-radioactive text-sm"></i>
+      <div class="flex justify-between w-full items-center">
+        <span class="text-[15px] ml-4 text-gray-200">Chemistry Courses</span>
+        <span class="text-sm" id="arrow-chemistry">
+          <i class="bi bi-chevron-down"></i>
+        </span>
+        
+      </div>
+    </div>
+    <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-white" id="submenu-chemistry">
+      <h1 class="cursor-pointer p-2 hover:bg-gray-500 rounded-md mt-1">PHY2001 - Classical mechanics</h1>
+    </div>
+    <!-- Biology Courses -->
+  <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600" onclick="dropdown('Biology')">
+    <i class="bi bi-bug text-sm"></i>
+    <div class="flex justify-between w-full items-center">
+      <span class="text-[15px] ml-4 text-gray-200">Biology Courses</span>
+      <span class="text-sm" id="arrow-Biology">
+        <i class="bi bi-chevron-down"></i>
+      </span>
+     
+    </div>
+  </div>
+  <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-white" id="submenu-Biology">
+    <h1 class="cursor-pointer p-2 hover:bg-gray-500 rounded-md mt-1">PHY2001 - Classical mechanics</h1>
+  </div>
+    <!-- Neuroscience Courses -->
+  <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600" onclick="dropdown('Neuroscience')">
+  <i class="bi bi-bezier text-sm"></i>
+  <div class="flex justify-between w-full items-center">
+    <span class="text-[15px] ml-4 text-gray-200">Neuroscience Courses</span>
+    <span class="text-sm" id="arrow-Neuroscience">
+      <i class="bi bi-chevron-down"></i>
+    </span>
+    
+    </div>
+  </div>
+<div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-white" id="submenu-Neuroscience">
+  <h1 class="cursor-pointer p-2 hover:bg-gray-500 rounded-md mt-1">PHY2001 - Classical mechanics</h1>
+</div>
+    <!-- Interdisciplinary Courses -->
+    <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white hover:bg-amber-600" onclick="dropdown('Interdisciplinary')">
+      <i class="bi bi-boxes text-sm"></i>
+      <div class="flex justify-between w-full items-center">
+        <span class="text-[15px] ml-4 text-gray-200">Interdisciplinary Courses</span>
+        <span class="text-sm " id="arrow-Interdisciplinary">
+          <i class="bi bi-chevron-down"></i>
+        </span>
+      </div>
+    </div>
+    <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-white" id="submenu-Interdisciplinary">
+      <h1 class="cursor-pointer p-2 hover:bg-gray-500 rounded-md mt-1">PHY2001 - Classical mechanics</h1>
+    </div>
+  </div>
+
+ <div class="flex lg:fixed lg:left-[300px] m-2 w-full-[-5px] p-4 rounded-md top-16"> 
+      <section >
+         <!-- title section -->
+      <section id="course name">  
+        <!--Flex container -->
+              <div class="flex md:flex-row pl-56 mx-auto  py-10">
+              <!-- Course name -->
+              <div class="flex flex-col mb-22 md:w-1/2">
+                  <h1 class="flex flex-col mx-auto text-4xl text-center font-bold text-sky-900 items-center justify-center">Organic Chemistry</h1>
+                  <h2 class="flex text-2xl text-center font-bold text-sky-700 items-center justify-center mt-4">CHE2001</h2> 
+                </div>
+              </div>
+            </section>
+      <!-- entire thingy -->
+        <div class="flex flex-col">
+          <!-- top part -->
+          <div id="hero section" class="flex pb-2">
+              <!-- top left -->
+            <div id="topleft" class="ml-40  w-1/2">
+              <div class=" pt-5 text-2xl text-left font-bold text-sky-900 rounded-md">
+                 <h2 class="">Pre-requisites</h2>
+                 <ul class="list-disc list-inside text-sky-700 text-sm">
+                   <li>CHE1001</li>
+                 </ul>
+              </div>
+              <div class="mx-auto py-5 text-2xl text-left font-bold text-sky-900 rounded-md">
+                <h2>Co-requisites</h2>
+                <ul class="list-disc list-inside text-left text-sky-700 text-sm">
+                  <li>Chemical Synthesis</li>
+                </ul>
+              </div>
+  
+              <div class="mx-auto text-2xl text-left font-bold text-sky-900 rounded-md">
+                <h2>Assessment</h2>
+                <ul class="list-disc list-inside text-left text-sky-700 text-sm">
+                  <li>Midterm</li>
+                  <li>Final</li>
+                  <li>Tutorial Participation</li>
+                </ul>
+              </div>
+            </div>
+              <!-- Top right -->
+            <div class="w-full flex items-center justify-center">
+              <div class="pt-5 text-2xl text-center my-4 font-bold text-sky-900 rounded-md bg-gray-100 h-full drop-shadow-xl w-1/2 ">
+                <h2>Course Info</h2>
+                <p class="ml-4 mt-3 mx-auto text-left text-sky-800 text-xs">Course Coordinator Name:</p>
+                <p class="ml-4 mx-auto text-left text-sky-700 text-xs"> Period 1: Dr. Matt Baker, Faculty of Health, Medicine and Life Sciences, MERLN <br> Period 4: Dr. Hanne Diliën, Faculty of 
+                Science and Engineering, Maastricht Science Programme.</p>
+                <p class="ml-4 mt-3 mx-auto text-left text-sky-800 text-xs">Course Coordinator Email:</p>
+                <p class="ml-4 mx-auto text-left text-sky-700 text-xs"> m.baker@maastrichtuniversity.nl <br> hanne.dilien@maastrichtuniversity.nl
+                </p>
+                <p class="ml-4 mt-3 mx-auto text-left text-sky-800 text-xs">Literature:
+                </p>
+                <p class="ml-4 mx-auto text-left text-sky-700 text-xs">Klein; “Organic Chemistry”; 2th edition or 3rd edition; Wiley (ISBN: 9781118452288/978-1119110477).</p>
+              </div>
+            </div>
+          </div>
+  
+  
+          <div class="ml-40 post w-1/2">
+            <div class="mx-auto py-5 text-2xl text-left font-bold text-sky-900 rounded-md ">
+              <h2>Course Description</h2>
+              <p class=" my-1 mx-auto text-justify text-xs text-sky-700">This course focuses on the basis of organic chemistry. In the first part of the course, important 
+                fundamental topics, such as atomic theory, bonding theory, hybridization, molecular orbital theory and 
+                resonance will be discussed. A special topic will be stereochemistry, which is an essential topic in organic 
+                chemistry and the life sciences, since stereochemistry often determines the activity of biological 
+                compounds or medicines. Subsequently, the course continues with an introduction into reactivity of 
+                organic molecules. Focus, will be on a selection of fundamental organic reactions, which form the basis 
+                for a wide array of other organic reactions. To this end, a logical review will be provided of the reactivity 
+                of the most important functional groups, as applied in organic synthesis.
+              </p>                   
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    
+  <script type="text/javascript">
+    function dropdown(subject){
+      document.querySelector(`#submenu-${subject}`).classList.toggle('hidden');
+      document.querySelector(`#arrow-${subject}`).classList.toggle('rotate-180');
+    }
+    function Open(){
+      document.querySelector('.sidebar').classList.toggle('left-[-300px]');
+    }
+  </script>
+  <script src="main.js"></script>
+</body>
+</html> 
