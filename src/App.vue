@@ -1,20 +1,7 @@
 <template>
-  
-
-      <!-- <div class="w-4/5 bg-gray-200 rounded-3xl mx-auto p-8">
-        <div class="grid cols-end-7 grid-flow-col grid-rows mx-auto">         
-              <button class="rounded-full inline p-4 m-3 w-34" v-for="module in modules" :key="module.id" 
-              :class=" (module.subject === 'BIO') ? 'bg-green-500 col-start-1 col-span-1 row-span-1'
-                            : (module.subject === 'CHE') ? 'bg-teal-500 :hover col-start-2 col-span-1 '
-                            : (module.subject === 'PHY') ? 'bg-sky-500 col-start-3 col-span-1'
-                            : (module.subject === 'MAT') ? 'bg-red-400 col-start-4 col-span-1'
-                            : (module.subject === 'INT') ? 'bg-indigo-400 col-start-5 col-span-1'
-                            : (module.subject === 'NEU') ? 'bg-rose-300 col-start-6 col-span-1'
-                            :'bg-slate-600 col-start-7 col-span-1'" @click="matchModules(module.id, module.subject, module.code, module.start1, module.end1, module.start2, module.end2, module.start3, module.end3)">
-                <p class="font-bold text-white "> {{module.subject}}{{module.code}} </p></button>
-          </div>
-      </div> -->
-    <div class="w-4/5 bg-gray-200 rounded-3xl mx-auto p-8">
+  <div>
+    <Semester :modules='modules' />
+    <!-- <div class="w-4/5 bg-gray-200 rounded-3xl mx-auto p-8">
         <div class="grid grid-cols-7  grid-flow-col-dense justify-between mx-auto">         
               <button class="relative block pr-70 bg-white  text-start pr-8 rounded-full m-3 h-12 w-32" v-for="module in modules" :key="module.id" 
               :class=" (module.subject === 'BIO') ? 'text-green-500 col-start-1 col-span-1 row-span-1 order-1'
@@ -24,25 +11,25 @@
                             : (module.subject === 'INT') ? 'text-indigo-400 col-start-5 col-span-1 row-start-auto order-5'
                             : (module.subject === 'NEU') ? 'text-rose-300 col-start-6 col-span-1 row-start-auto order-6 inline'
                             :'bg-slate-600 col-start-7 col-span-1 order-last'" @click="matchModules(module.id, module.subject, module.code, module.start1, module.end1, module.start2, module.end2, module.start3, module.end3)">
-                            <p class="font-bold mx-auto  text-xs inline"> {{module.subject}} {{module.code}} </p>
+                            <p class="font-bold mx-auto  text-xs inline"> {{module.subject}} {{module.code}} {{module.id}} </p>
                              
-                            <span class="w-10 h-12 inline-block rounded-r-full -my-3 absolute right-0" :class="(module.subject === 'BIO') ? 'bg-green-500 col-start-1 col-span-1 row-span-1'
-                            : (module.subject === 'CHE') ? 'bg-teal-500 '
-                            : (module.subject === 'PHY') ? 'bg-sky-500 '
-                            : (module.subject === 'MAT') ? 'bg-red-400 '
+                            <span @mouseover="displayInfo" class="w-10 h-12 inline-block rounded-r-full -my-3 absolute right-0" :class="(module.subject === 'BIO') ? 'bg-green-500 col-start-1 col-span-1 row-span-1'
+                            : (module.subject === 'CHE') ? 'bg-teal-500'
+                            : (module.subject === 'PHY') ? 'bg-sky-500'
+                            : (module.subject === 'MAT') ? 'bg-red-400'
                             : (module.subject === 'INT') ? 'bg-indigo-400'
-                            : (module.subject === 'NEU') ? 'bg-rose-300 '
-                            : 'bg-slate-600'"> <a class="text-white text-bold justify-self-center absolute top-3">i</a> </span> </button>
-          </div> <div class="block bg-white rounded-2xl p-8 m-3 w-56">
+                            : (module.subject === 'NEU') ? 'bg-rose-300'
+                            : 'bg-slate-600'"> <a class="text-white text-bold justify-self-center absolute top-3" >i</a> </span> </button>
+                            <div v-show="active" class="bg-white w-20"> ola </div>
+           
+          <div class="block col-span-7 col-start-1 bg-white rounded-2xl p-8 m-3 w-full">
             <h1>YOUR CHOICES FOR PERIOD 4:</h1>
-            <button class="block text-white bg-slate-600 rounded-full p-3 m-3 w-40 mx-auto " v-for="(choice, index) in choices" :key="index">
-              <a class="float-left">{{choice.subject}}{{choice.code}} </a>
+            <button @click="deleteChoice(choice.id)" class="inline-block text-white bg-slate-600 rounded-full p-3 m-3 w-1/5 mx-auto " v-for="choice in choices" :key="choice.id">
+              <a class="float-left">{{choice.subject}}{{choice.code}} {{choice.id}} </a>
               <a class="absolute text-2xl text-bold text-white -my-2 mx-2"  @click="console.log('hello')">&times;</a>
             </button>
-          </div>
-      
-    
-   
+          </div></div>
+    </div> -->
     </div>
 </template>
 
@@ -51,18 +38,25 @@
 import { supabase } from "./supabase.js"
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import Semester from './components/Semester.vue'
 
 const moment = extendMoment(Moment);
 export default {
   name: 'App',
   components: {
+    Semester,
   },
   data() {
     return {
       modules: [],
       courses: [],
       practicals: [],
-      choices: []
+      choices: [],
+      active: false,
+      unavailable: [],
+      periods: [1, 2, 4, 5],
+      semesters: [1, 2, 3, 4, 5,]
+      
     }
   },
   mounted() {
@@ -71,6 +65,7 @@ export default {
     this.fetchAllModules();
     // this.fetchAllCourses();
     // this.fetchAllPracticals();
+    //this.findUnavailable();
   },
   methods: {
     async fetchAllCourses() {
@@ -79,6 +74,10 @@ export default {
         .select()
       this.courses = response.data;
     },
+    // findUnavailable() {
+
+    //   this.unavailable = modules.filter()
+    // },
     matchModules(id, subject, code, start1, end1, start2, end2, start3, end3) {
       if (subject == 'PRA') {
         this.modules = this.modules.filter(function(practical) {
@@ -198,6 +197,16 @@ export default {
       this.choices = [...this.choices, choice]
       // console.log(this.choices);
     },
+    displayInfo: function () {
+      this.active = !this.active
+      
+    },
+    // deleteChoice(id) {
+      
+    //   this.choices = this.choices.filter((choice) => choice.id !== id)
+    //   modules.push(this.choices.id)
+    // }
+    
   }
 }
 </script>
