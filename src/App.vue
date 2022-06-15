@@ -1,6 +1,7 @@
 <template>
   <div>
     <Semester :modules='modules' />
+    <Choice :choices='choice' />
     <!-- <div class="w-4/5 bg-gray-200 rounded-3xl mx-auto p-8">
         <div class="grid grid-cols-7  grid-flow-col-dense justify-between mx-auto">         
               <button class="relative block pr-70 bg-white  text-start pr-8 rounded-full m-3 h-12 w-32" v-for="module in modules" :key="module.id" 
@@ -40,25 +41,27 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import Semester from './components/Semester.vue';
 import Toggle from './components/Toggle.vue'
+import Choice from './components/Choice.vue'
 
 const moment = extendMoment(Moment);
 export default {
   name: 'App',
   components: {
     Semester,
-    Toggle
+    Toggle,
+    Choice
   },
   data() {
     return {
       modules: [],
       courses: [],
       practicals: [],
-      choices: [],
+      choices: ['PRA'],
       active: true,
       unavailable: [],
       periods: [],
-      count:0,
-      semesters: [1, 2, 3, 4, 5,]
+      semesters: [1, 2, 3, 4, 5,],
+      
       
     }
   },
@@ -66,6 +69,7 @@ export default {
     this.matchModules()
     // this.retrieveTest();
     this.fetchAllModules();
+    this.addChoice();
     // this.fetchAllCourses();
     // this.fetchAllPracticals();
     //this.findUnavailable();
@@ -164,6 +168,7 @@ export default {
           }
         })
       }
+      
       this.addChoice(id, subject, code);
     },
     async fetchAllPracticals() {
@@ -192,23 +197,31 @@ export default {
       console.log(this.modules)
     },
     addChoice(id, subject, code) {
+      
       const choice = {
         id: id,
         subject: subject,
         code: code
       };
+      if (id !== 0) {
       this.choices = [...this.choices, choice]
       // console.log(this.choices);
-    },
+      } else {
+      this.choices = [0]
+    }},
     displayInfo: function () {
       this.active = !this.active
       
     },
-    deleteChoice(id) {
+
+    print() {
+      console.log(choices)
+    }
+    // deleteChoice(id) {
       
-      this.choices = this.choices.filter((choice) => choice.id !== id)
-      modules.push(this.choices.id)
-    },
+    //   this.choices = this.choices.filter((choice) => choice.id !== id)
+    //   modules.push(this.choices.id)
+    // },
     
     
   }
