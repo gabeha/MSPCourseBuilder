@@ -1,0 +1,58 @@
+[
+    {
+        "name": "Organic Chemistry",
+        "course_id": "CHE2001",
+        "area": "CHEM",
+        "time": "AM",
+        "level": "2000 ",
+        "type": "course"
+    },
+    {
+        "name": "Advanced Physical Chemistry",
+        "course_id": "CHE3007",
+        "area": "CHEM",
+        "time": "PM",
+        "level": "3000",
+        "type": "course"
+    },
+    {
+        "name": "Calculus",
+        "course_id": "MAT2006",
+        "area": "MATH",
+        "time": "AM",
+        "level": "2000",
+        "type": "course"
+    },
+    {
+        "name": "Neuroscience Of Action",
+        "course_id": "NEU3001",
+        "area": "Neuroscience",
+        "time": "PM",
+        "level": "3000",
+        "type": "course"
+    },
+    {
+        "name": "Big Data In Physics",
+        "course_id": "PRA3024",
+        "area": "PHYSICS",
+        "time": "AM",
+        "level": "3000",
+        "type": "practical"
+    },
+    {
+        "name": "Programming",
+        "course_id": "PRA2003",
+        "area": "MATH",
+        "time": "PM",
+        "level": "2000",
+        "type": "practical"
+    },
+    {
+        "name": "Chemical Synthesis",
+        "course_id": "PRA2002",
+        "area": "CHEM",
+        "time": "AM",
+        "level": "2000",
+        "type": "practical"
+    }
+]
