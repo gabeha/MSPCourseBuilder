@@ -2,14 +2,15 @@
     <Toggle @togg="periodInSemester" />
     <Choice />
     <div class="grid gap-4 grid-cols-2 grid-flow-col-dense  w-3/4 bg-white rounded-3xl truncate mx-auto p-8">
-        <div  v-for="(period, index) in periods" :key="index"  class="relative block h-fit rounded-3xl  w-full" :class="(period == 1) ? 'bg-gray-100 col-start-1 col-span-1 row-start-3 row-span-1'
-                                        :(period == 2) ? 'bg-gray-100 row-start-3 col-start-2 col-span-1 '
-                                        :(period == 4) ? 'bg-gray-100 row-start-3 col-start-1 col-span-1 row-span-1 '
-                                        : 'bg-gray-100 row-start-3 col-start-2 col-span-1 row-span-1 '">
+        <div  v-for="(period, index) in periods" :key="index"  class="relative block h-fit rounded-3xl  w-full" :class="(period == 1) ? 'bg-gray-200 col-start-1 col-span-1 row-start-3 row-span-1'
+                                        :(period == 2) ? 'bg-gray-200 row-start-3 col-start-2 col-span-1 '
+                                        :(period == 4) ? 'bg-gray-200 row-start-3 col-start-1 col-span-1 row-span-1 '
+                                        : 'bg-gray-200 row-start-3 col-start-2 col-span-1 row-span-1 '">
                 <h2 class="text-black rounded-t-xl text-center tracking-widest">PERIOD {{ period }}</h2>
-          <div v-for="(subject, index) in sub" :key="index" class="grid grid-cols-2 rounded-3xl grid-flow-row-dense "><button class="col-span-2 h-12 m-3  rounded-full text-center bg-gray-200 ">{{ subject }} </button>   
-                
-              <button class="relative block pr-70 bg-white text-start pr-8 rounded-full m-3 h-12 min-w-28 " v-for="module in modules" v-show="module.subject == subject" :key="module.id"
+              
+      
+       <div class="grid grid-cols-2 rounded-3xl grid-flow-row-dense ">         
+              <button class="relative block pr-70 bg-white text-start pr-8 rounded-full m-3 h-12 min-w-28 " v-for="module in modules" :key="module.id" 
               :class=" (module.subject === 'BIO') ? 'text-green-500  order-1 '
                             : (module.subject === 'CHE') ? 'text-teal-500 order-2 '
                             : (module.subject === 'PHY') ? 'text-sky-500 order-3 '
@@ -26,10 +27,10 @@
                             : (module.subject === 'INT') ? 'bg-indigo-400'
                             : (module.subject === 'NEU') ? 'bg-rose-300'
                             : 'bg-slate-600'"> <a class="text-white text-bold justify-self-center absolute top-3" >i</a> </span> </button>
-             </div>             
+                         
            </div>
           </div>
-        
+        </div>
  
 
     
@@ -46,7 +47,6 @@ export default {
        
         index: Intl,
         modules: Array,
-        active: Boolean
    
 
 
@@ -57,9 +57,7 @@ export default {
     },
     data() {
         return {
-            periods: [1, 2],
-            sub: ['BIO', 'CHE', 'PHY', 'INT', 'NEU', 'MAT', 'PRA'],
-
+            periods:[1, 2]
         }
     },
     methods: {

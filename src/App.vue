@@ -11,7 +11,7 @@
                             : (module.subject === 'INT') ? 'text-indigo-400 col-start-5 col-span-1 row-start-auto order-5'
                             : (module.subject === 'NEU') ? 'text-rose-300 col-start-6 col-span-1 row-start-auto order-6 inline'
                             :'bg-slate-600 col-start-7 col-span-1 order-last'" @click="matchModules(module.id, module.subject, module.code, module.start1, module.end1, module.start2, module.end2, module.start3, module.end3)">
-                            <p class="font-bold mx-auto  text-xs inline"> {{module.subject}} {{module.code}} {{module.id}} </p>
+                            <p class="font-bold mx-auto  text-xs inline"> {{module.subject}} {{module.code}} </p>
                              
                             <span @mouseover="displayInfo" class="w-10 h-12 inline-block rounded-r-full -my-3 absolute right-0" :class="(module.subject === 'BIO') ? 'bg-green-500 col-start-1 col-span-1 row-span-1'
                             : (module.subject === 'CHE') ? 'bg-teal-500'
@@ -25,7 +25,7 @@
           <div class="block col-span-7 col-start-1 bg-white rounded-2xl p-8 m-3 w-full">
             <h1>YOUR CHOICES FOR PERIOD 4:</h1>
             <button @click="deleteChoice(choice.id)" class="inline-block text-white bg-slate-600 rounded-full p-3 m-3 w-1/5 mx-auto " v-for="choice in choices" :key="choice.id">
-              <a class="float-left">{{choice.subject}}{{choice.code}} {{choice.id}} </a>
+              <a class="float-left">{{choice.subject}}{{choice.code}}  </a>
               <a class="absolute text-2xl text-bold text-white -my-2 mx-2"  @click="console.log('hello')">&times;</a>
             </button>
           </div></div>
@@ -38,13 +38,15 @@
 import { supabase } from "./supabase.js"
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import Semester from './components/Semester.vue'
+import Semester from './components/Semester.vue';
+import Toggle from './components/Toggle.vue'
 
 const moment = extendMoment(Moment);
 export default {
   name: 'App',
   components: {
     Semester,
+    Toggle
   },
   data() {
     return {
@@ -52,9 +54,10 @@ export default {
       courses: [],
       practicals: [],
       choices: [],
-      active: false,
+      active: true,
       unavailable: [],
-      periods: [1, 2, 4, 5],
+      periods: [],
+      count:0,
       semesters: [1, 2, 3, 4, 5,]
       
     }
@@ -201,11 +204,12 @@ export default {
       this.active = !this.active
       
     },
-    // deleteChoice(id) {
+    deleteChoice(id) {
       
-    //   this.choices = this.choices.filter((choice) => choice.id !== id)
-    //   modules.push(this.choices.id)
-    // }
+      this.choices = this.choices.filter((choice) => choice.id !== id)
+      modules.push(this.choices.id)
+    },
+    
     
   }
 }
