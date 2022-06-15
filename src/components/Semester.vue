@@ -18,7 +18,7 @@
                                 : (module.subject === 'MAT') ? 'text-red-400 col-span-2 '
                                 : (module.subject === 'INT') ? 'text-indigo-400 col-span-2 '
                                 : (module.subject === 'NEU') ? 'text-rose-300 col-span-2 '
-                                :'bg-slate-600 col-span-1'" @click="matchModules(module.id, module.subject, module.code, module.start1, module.end1, module.start2, module.end2, module.start3, module.end3)">
+                                :'bg-slate-600 col-span-1'" @click="makeChoice(module.id, module.subject, module.code, module.start1, module.end1, module.start2, module.end2, module.start3, module.end3)">
                                 <p class="font-bold mx-auto  text-xs inline"> {{module.subject}} {{module.code}} {{module.id}} </p>
                                 
                                 <span class="w-10 h-12 inline-block rounded-r-full -my-3 absolute right-0" :class="(module.subject === 'BIO') ? 'bg-green-500  col-span-1 row-span-1'
@@ -67,11 +67,11 @@ export default {
         }
     },
     methods: {
-       periodInSemester(count) {
+        periodInSemester(count) {
             if (count % 2 !== 0) {
                 const a = [1]
                 this.periods = a
-                
+
             }
             else {
                 const a = [4]
@@ -79,9 +79,12 @@ export default {
 
             }
         },
-        
-    }, 
-   
+
+        makeChoice(id, subject, code, start1, end1, start2, end2, start3, end3) {
+            this.$emit("makechoice", id, subject, code, start1, end1, start2, end2, start3, end3)
+        }
+
+    }
     }
 
 </script>

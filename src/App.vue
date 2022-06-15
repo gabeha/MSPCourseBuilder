@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Semester :modules='modules' />
-    <Choice :choices='choice' />
+    <Semester :modules='modules' @makechoice="matchModules" />
+    <Choice :choices='choices'  />
     <!-- <div class="w-4/5 bg-gray-200 rounded-3xl mx-auto p-8">
         <div class="grid grid-cols-7  grid-flow-col-dense justify-between mx-auto">         
               <button class="relative block pr-70 bg-white  text-start pr-8 rounded-full m-3 h-12 w-32" v-for="module in modules" :key="module.id" 
@@ -56,7 +56,7 @@ export default {
       modules: [],
       courses: [],
       practicals: [],
-      choices: ['PRA'],
+      choices: [],
       active: true,
       unavailable: [],
       periods: [],
@@ -66,10 +66,10 @@ export default {
     }
   },
   mounted() {
-    this.matchModules()
+    // this.matchModules()
     // this.retrieveTest();
     this.fetchAllModules();
-    this.addChoice();
+   
     // this.fetchAllCourses();
     // this.fetchAllPracticals();
     //this.findUnavailable();
@@ -168,7 +168,7 @@ export default {
           }
         })
       }
-      
+      console.log(id)
       this.addChoice(id, subject, code);
     },
     async fetchAllPracticals() {
@@ -203,12 +203,10 @@ export default {
         subject: subject,
         code: code
       };
-      if (id !== 0) {
       this.choices = [...this.choices, choice]
       // console.log(this.choices);
-      } else {
-      this.choices = [0]
-    }},
+    }
+  },
     displayInfo: function () {
       this.active = !this.active
       
@@ -225,5 +223,5 @@ export default {
     
     
   }
-}
+
 </script>
