@@ -5,10 +5,14 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest --watchAll --verbose"
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.35.3",
+    "@vue/cli-plugin-unit-jest": "^5.0.4",
+    "@vue/test-utils": "^2.0.1",
+    "jest": "^28.1.1",
     "moment": "^2.29.3",
     "moment-range": "^4.0.2",
     "vue": "^3.2.25"
