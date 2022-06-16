@@ -1,11 +1,7 @@
 <template>
-    <Toggle @togg="periodInSemester" />
     <div class="grid gap-4 grid-cols-3 grid-flow-row-dense  w-3/4 bg-white rounded-3xl truncate mx-auto p-8">
-        <div  v-for="(period, index) in periods" :key="index"  class="relative block h-fit rounded-3xl  w-full" :class="(period == 1) ? 'bg-gray-100  col-span-3  row-span-1'
-                                        :(period == 2) ? 'bg-gray-100 row-start-3 col-start-2 col-span-1 '
-                                        :(period == 4) ? 'bg-gray-100 row-start-3 col-start-1 col-span-1 row-span-1 '
-                                        : 'bg-gray-100 row-start-3 col-start-2 col-span-1 row-span-1 '">
-                <h2 class="text-black rounded-t-xl text-center tracking-widest">PERIOD {{ period }}</h2>
+        <div class="relative block h-fit rounded-3xl  w-full bg-gray-100  col-span-3  row-span-1">
+                <!-- <h2 class="text-black rounded-t-xl text-center tracking-widest" v-for="(period, index) in periods" :key="index">PERIOD {{ period }} {{ count }}</h2> -->
         </div>  
             <div  :class="(subject == 'PRA') ? 'col-span-3' : 'col-span-1'" class="bg-gray-100" v-for="(subject, index) in sub" :key="index">
     
@@ -46,13 +42,9 @@ import Choice from './Choice.vue'
 export default {
     name: 'Semester',
     props: {
-       
         index: Intl,
         modules: Array,
-        active: Boolean
-   
-
-
+        
     },
     components: {
         Toggle,
@@ -60,31 +52,70 @@ export default {
     },
     data() {
         return {
-            periods: [1],
+           
             sub: ['BIO', 'CHE', 'PHY', 'INT', 'NEU', 'MAT', 'PRA'],
             
-
         }
     },
+    // mounted() {
+    //     this.periodInSemester()
+    // },
     methods: {
-        periodInSemester(count) {
-            if (count % 2 !== 0) {
-                const a = [1]
-                this.periods = a
+        // periodInSemester(count) {
+        //     if (count % 2 !== 0) {
+        //         const a = [1]
+        //         this.periods = a
 
-            }
-            else {
-                const a = [4]
-                this.periods = a
+        //     }
+        //     else {
+        //         const a = [4]
+        //         this.periods = a
 
-            }
-        },
+        //     }
+        // },
+        // periodInSemester(count) {
+        //     if (count % 2 !== 0) {
+        //         const a = [1]
+        //         this.period = a
+
+        //     }
+        //     else {
+        //         const a = [4]
+        //         this.period = a
+
+        //     }
+        // },
+
+        // periodInSemester(count) {
+        // let c = count;
+        //     if (c == 1) {
+        //         this.periods = 1;
+        //     } else if (c == 2) {
+        //             this.periods = 2
+        //     } else if (c == 3) {
+        //             this.semester++
+        //             this.count = 4
+        //     } else if (c == 4) {
+        //             this.periods = 4
+        //     } else if (c == 5) {
+        //             this.periods = 5
+        //     } else {
+        //             this.semester++
+        //             this.count = 1
+
+        //     }
+
+        //     }
+        // },
 
         makeChoice(id, subject, code, start1, end1, start2, end2, start3, end3) {
             this.$emit("makechoice", id, subject, code, start1, end1, start2, end2, start3, end3)
-        }
+        },
+
+
 
     }
-    }
+}
+
 
 </script>
