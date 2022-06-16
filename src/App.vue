@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Toggle />
-    <Semester :modules='modules' @makechoice="matchModules"  />
-    <Choice :choices='choices' @deletechoice="deleteChoice"  />
+    <Toggle @nextperiod="nextPeriodSemester" @lastperiod="previousPeriodSemester" :period="p" :semester="semester" />
+    <Semester :modules='modules' :p="p" @makechoice="matchModules"  />
+    <Choice :p="p" :choices='choices' @deletechoice="deleteChoice"  />
     <!-- <div class="w-4/5 bg-gray-200 rounded-3xl mx-auto p-8">
         <div class="grid grid-cols-7  grid-flow-col-dense justify-between mx-auto">         
               <button class="relative block pr-70 bg-white  text-start pr-8 rounded-full m-3 h-12 w-32" v-for="module in modules" :key="module.id" 
@@ -60,33 +60,29 @@ export default {
       choices: [],
       active: true,
       unavailable: [],
-     
-
-
+      allModules: [], 
+      p: 1,
+      semester: 1,
     }
   },
+
   mounted() {
     // this.matchModules()
     // this.retrieveTest();
     this.fetchAllModules();
-    this.unavailable()
-
-    // this.fetchAllCourses();
-    // this.fetchAllPracticals();
-    //this.findUnavailable();
+    // this.previousPeriodSemester()
+    // this.nextPeriodSemester()
+   
   },
   methods: {
     async fetchAllCourses() {
       const response = await supabase
         .from('courses')
         .select()
-      this.courses = response.data;
+      this.courses = response.data;     
     },
-    // findUnavailable() {
-
-    //   this.unavailable = modules.filter()
-    // },
-    matchModules(id, subject, code, start1, end1, start2, end2, start3, end3) {
+    matchModules(id, subject, code, start1, end1, start2, end2, start3, end3, period) {
+      // this.modules = this.modules.filter(module => module.period==this.p)
       if (subject == 'PRA') {
         this.modules = this.modules.filter(function (practical) {
           return practical.subject !== 'PRA'
@@ -170,8 +166,94 @@ export default {
         })
       }
       console.log(id)
-      this.addChoice(id, subject, code);
+      this.addChoice(id, subject, code, period);
     },
+    // matchModules(id, subject, code, start1, end1, start2, end2, start3, end3, period) {
+    //   if (subject == 'PRA') {
+    //     this.modules = this.modules.filter(function (practical) {
+    //       return practical.subject !== 'PRA'
+    //     })
+    //     this.modules = this.modules.filter(function (course) {
+    //       const rc1 = moment.range(course.start1, course.end1)
+    //       const rc2 = moment.range(course.start2, course.end2)
+    //       const rp1 = moment.range(start1, end1)
+    //       // console.log(start2!==null)
+    //       if (start3 !== null) {
+    //         const rp2 = moment.range(start2, end2);
+    //         const rp3 = moment.range(start3, end3);
+    //         console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+    //           || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+    //           || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+    //       }
+    //       if ((start3 == null) && (start2 !== null)) {
+    //         const rp2 = moment.range(start2, end2);
+    //         // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //         // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //         console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //         // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+    //         // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //       }
+    //       if (start2 == null) {
+    //         // console.log(rp1)
+    //         // console.log(rc2.overlaps(rp1))
+    //         console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //       }
+    //     })
+    //   }
+    //   else {
+    //     this.modules = this.modules.filter(function (course) {
+    //       const rc1 = moment.range(course.start1, course.end1)
+    //       const rc2 = moment.range(course.start2, course.end2)
+    //       const rp1 = moment.range(start1, end1);
+    //       const rp2 = moment.range(start2, end2);
+    //       return (!(rc1.overlaps(rp1) || rc1.overlaps(rp2)) || !(rc2.overlaps(rp1) || rc2.overlaps(rp2)))
+    //     })
+    //     this.modules = this.modules.filter(function (course) {
+    //       const rc1 = moment.range(start1, end1)
+    //       const rc2 = moment.range(start2, end2)
+    //       const rp1 = moment.range(course.start1, course.end1)
+    //       // console.log(start2!==null)
+    //       if (course.start3 !== null) {
+    //         const rp2 = moment.range(course.start2, course.end2);
+    //         const rp3 = moment.range(course.start3, course.end3);
+    //         console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+    //           || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+    //           || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+    //       }
+    //       if ((course.start3 == null) && (course.start2 !== null)) {
+    //         const rp2 = moment.range(course.start2, course.end2);
+    //         // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //         // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //         console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //         // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+    //         // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //       }
+    //       if (course.start2 == null) {
+    //         // console.log(rp1)
+    //         // console.log(rc2.overlaps(rp1))
+    //         console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //       }
+    //     })
+    //   }
+    //   console.log(id)
+    //   this.addChoice(id, subject, code, period);
+    // },
     async fetchAllPracticals() {
       const response = await supabase
         .from('practicals')
@@ -195,37 +277,75 @@ export default {
           element.end3 = new Date(element.end3);
         }
       });
-      console.log(this.modules)
+      
     },
-    addChoice(id, subject, code) {
-
+    addChoice(id, subject, code, period) {
       const choice = {
         id: id,
         subject: subject,
-        code: code
+        code: code,
+        period: period
       };
       this.choices = [...this.choices, choice]
       // console.log(this.choices);
     },
-
-    displayInfo: function () {
-      this.active = !this.active
-
-    },
-
-
     deleteChoice(id) {
       this.choices = this.choices.filter((choice) => choice.id !== id)
       modules.push(this.choices.id)
     },
-    async unavailable() {
-      const all = await supabase
-        .from('modules')
-        .select()
-
+    nextPeriodSemester() { 
+        let s = this.semester;
+          if (s < 6) {
+            if (this.p == 2) {
+                this.semester++
+                this.p = 4
+            } else if (this.p == 5) {
+                this.semester++
+                this.p = 1
+            } else {
+              this.p++
+            }
+        } else {
+            this.semester = 6
+                if (this.p == 4) {
+                this.p = 5
+                
+                } else {
+                this.p = 5
+                  
+            }
+            fetchAllModules()
+      }
+      
+        
+    },
+    previousPeriodSemester() { 
+        let s = this.semester;
+          if (s > 1) {
+            if (this.p == 4) {
+                this.semester--
+                this.p = 2
+            } else if (this.p == 1) {
+                this.semester--
+                this.p = 5
+            } else {
+                this.p--
+            }
+        } else {
+            this.semester = 1
+                if (this.p == 2) {
+                this.p = 1
+                } else {
+                    this.p = 1
+            }
+      }fetchAllModules()
+    
+        
+    },
+    
     }
 
   }
-}
+
 
 </script>
