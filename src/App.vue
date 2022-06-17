@@ -79,10 +79,25 @@ export default {
       const response = await supabase
         .from('courses')
         .select()
-      this.courses = response.data;     
+      this.courses = response.data;
+    },
+    addChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period) {
+      const choice = {
+        id: id,
+        subject: subject,
+        code: code,
+        start1: start1,
+        end1: end1,
+        start2: start2,
+        end2: end2,
+        start3: start3,
+        end3: end3,
+        period: period
+      };
+      this.choices = [...this.choices, choice]
+
     },
     matchModules(id, subject, code, start1, end1, start2, end2, start3, end3, period) {
-      // this.modules = this.modules.filter(module => module.period==this.p)
       if (subject == 'PRA') {
         this.modules = this.modules.filter(function (practical) {
           return practical.subject !== 'PRA'
@@ -94,10 +109,10 @@ export default {
           // console.log(start2!==null)
           if (start3 !== null) {
             const rp2 = moment.range(start2, end2);
-            const rp3 = moment.range(start3, end3);
-            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
-              || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+            const rp3 = moment.range(start3, end3)
+            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+            //   || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
             return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
               || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
               || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
@@ -106,8 +121,8 @@ export default {
             const rp2 = moment.range(start2, end2);
             // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
             // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-            console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+            // console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
 
             return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
               || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)))
@@ -117,7 +132,7 @@ export default {
           if (start2 == null) {
             // console.log(rp1)
             // console.log(rc2.overlaps(rp1))
-            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
             return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
           }
         })
@@ -138,9 +153,9 @@ export default {
           if (course.start3 !== null) {
             const rp2 = moment.range(course.start2, course.end2);
             const rp3 = moment.range(course.start3, course.end3);
-            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
-              || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+            //   || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
             return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
               || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
               || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
@@ -149,8 +164,8 @@ export default {
             const rp2 = moment.range(course.start2, course.end2);
             // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
             // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-            console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+            // console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
 
             return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
               || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)))
@@ -160,15 +175,114 @@ export default {
           if (course.start2 == null) {
             // console.log(rp1)
             // console.log(rc2.overlaps(rp1))
-            console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
             return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
           }
         })
       }
-      console.log(id)
-      this.addChoice(id, subject, code, period);
+      this.addChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period)
+
     },
-    // matchModules(id, subject, code, start1, end1, start2, end2, start3, end3, period) {
+    async fetchAllPracticals() {
+      const response = await supabase
+        .from('practicals')
+        .select()
+      this.practicals = response.data;
+    },
+    async fetchAllModules() {
+      const response = await supabase
+        .from('modules')
+        .select()
+      this.modules = response.data;
+      this.all = response.data;
+      this.modules.forEach(element => {
+        element.start1 = new Date(element.start1);
+        element.end1 = new Date(element.end1);
+        if (element.start2 != null) {
+          element.start2 = new Date(element.start2);
+          element.end2 = new Date(element.end2);
+        }
+        if (element.start3 != null) {
+          element.start3 = new Date(element.start3);
+          element.end3 = new Date(element.end3);
+        }
+      });
+
+    },
+    deleteChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period) {
+      const module = {
+        id: id,
+        subject: subject,
+        code: code,
+        start1: start1,
+        end1: end1,
+        start2: start2,
+        end2: end2,
+        start3: start3,
+        end3: end3,
+        period: period
+      };
+      this.choices = this.choices.filter((choice) => choice.id !== id)
+      this.modules = [...this.modules, module]
+    },
+    nextPeriodSemester() {
+      let s = this.semester;
+      if (s < 6) {
+        if (this.p == 2) {
+          this.semester++
+          this.p = 4
+        } else if (this.p == 5) {
+          this.semester++
+          this.p = 1
+        } else {
+          this.p++
+        }
+      } else {
+        this.semester = 6
+        if (this.p == 4) {
+          this.p = 5
+
+        } else {
+          this.p = 5
+
+        }
+      }
+
+
+    },
+    previousPeriodSemester() {
+      let s = this.semester;
+      if (s > 1) {
+        if (this.p == 4) {
+          this.semester--
+          this.p = 2
+        } else if (this.p == 1) {
+          this.semester--
+          this.p = 5
+        } else {
+          this.p--
+        }
+      } else {
+        this.semester = 1
+        if (this.p == 2) {
+          this.p = 1
+        } else {
+          this.p = 1
+        }
+      }
+
+
+    },
+    allmods() {
+
+    }
+
+  }
+  }
+
+
+</script>
+   // matchModules(id, subject, code, start1, end1, start2, end2, start3, end3, period) {
     //   if (subject == 'PRA') {
     //     this.modules = this.modules.filter(function (practical) {
     //       return practical.subject !== 'PRA'
@@ -254,98 +368,3 @@ export default {
     //   console.log(id)
     //   this.addChoice(id, subject, code, period);
     // },
-    async fetchAllPracticals() {
-      const response = await supabase
-        .from('practicals')
-        .select()
-      this.practicals = response.data;
-    },
-    async fetchAllModules() {
-      const response = await supabase
-        .from('modules')
-        .select()
-      this.modules = response.data;
-      this.modules.forEach(element => {
-        element.start1 = new Date(element.start1);
-        element.end1 = new Date(element.end1);
-        if (element.start2 != null) {
-          element.start2 = new Date(element.start2);
-          element.end2 = new Date(element.end2);
-        }
-        if (element.start3 != null) {
-          element.start3 = new Date(element.start3);
-          element.end3 = new Date(element.end3);
-        }
-      });
-      
-    },
-    addChoice(id, subject, code, period) {
-      const choice = {
-        id: id,
-        subject: subject,
-        code: code,
-        period: period
-      };
-      this.choices = [...this.choices, choice]
-      // console.log(this.choices);
-    },
-    deleteChoice(id) {
-      this.choices = this.choices.filter((choice) => choice.id !== id)
-      modules.push(this.choices.id)
-    },
-    nextPeriodSemester() { 
-        let s = this.semester;
-          if (s < 6) {
-            if (this.p == 2) {
-                this.semester++
-                this.p = 4
-            } else if (this.p == 5) {
-                this.semester++
-                this.p = 1
-            } else {
-              this.p++
-            }
-        } else {
-            this.semester = 6
-                if (this.p == 4) {
-                this.p = 5
-                
-                } else {
-                this.p = 5
-                  
-            }
-            fetchAllModules()
-      }
-      
-        
-    },
-    previousPeriodSemester() { 
-        let s = this.semester;
-          if (s > 1) {
-            if (this.p == 4) {
-                this.semester--
-                this.p = 2
-            } else if (this.p == 1) {
-                this.semester--
-                this.p = 5
-            } else {
-                this.p--
-            }
-        } else {
-            this.semester = 1
-                if (this.p == 2) {
-                this.p = 1
-                } else {
-                    this.p = 1
-            }
-      }fetchAllModules()
-    
-        
-    },
-    
-    }
-
-  }
-
-
-</script>
