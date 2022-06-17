@@ -1,12 +1,17 @@
 <template>
-<div class="p-t-8 px-8 mt-8">
-    <div class= "w-3/4  px-5 trunicate text-center rounded-t-3xl h-24 bg-green-500">
-        <button @click="previous()" class=" text-black float-left  text-xl font-bold"> &lt; </button>
-        <h1 class="text-xl text-white font-bold">SEMESTER {{ semester }} Period: {{ period }} </h1>
-        <button @click="next()" class="float-right text-xl text-black font-bold "> > </button>
-    </div>        
- </div>
-  
+    <div class="p-t-8 w-3/5 m-8 mt-8">
+        <div class= " trunicate text-center rounded-t-3xl h-24 bg-green-500">
+            <button @click="previous()" class=" text-black z-5 float-left m-5 text-xl font-bold">
+                &lt; 
+             </button>
+            <h1 class="text-xl text-white font-bold">
+                SEMESTER {{ semester }} Period: {{ period }} 
+            </h1>
+            <button @click="next()" class="float-right m-5 text-xl text-black font-bold ">
+             > 
+            </button>
+        </div>        
+    </div>
     
 </template>
 
@@ -32,6 +37,4 @@ export default {
         }
     }
 }
-
-
 </script>

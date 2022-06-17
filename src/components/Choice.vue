@@ -1,14 +1,11 @@
 <template>
-     <div class="bg-gray-200 inline right-0 top-56 h-full fixed rounded-3xl p-8 m-3  w-3/12">    
-           <div class="grid h-full  grid-cols-2">
-        <ul v-for="(period, index) in periods" :key="index">
+     <div class="bg-gray-200 -z-50 inline right-0 top-56 h-3/5 truncate fixed rounded-3xl p-8 m-3  w-3/12">    
+           <div class="grid h-full gap-4 grid-cols-2">
+        <ul v-for="(period, index) in periods" :key="index" class=" col-span-1 list-inside">
         Your selection for period {{period}}:
-        <li :key="choice.id" v-for="choice in choices" v-show="choice.period==period">{{ choice.subject }} {{choice.code}} </li>
+        <li class="bg-white py-1 m-1 rounded-full " :key="choice.id" v-for="choice in choices" v-show="choice.period==period">{{ choice.subject }} {{choice.code}} <button @click="removechoice(choice.id)" class="float-right mr-8"><a>&times;</a></button></li>
         </ul>
-            <!-- <button @click="removechoice(choice.id)" class="block text-white bg-slate-600 rounded-full p-3 m-3 w-1/3 mx-auto " v-for="choice in choices"  :key="choice.id">
-              <a class="float-left text-white"> {{choice.code}}</a>
-              <a class="absolute text-2xl text-bold text-white float-right">&times;</a>
-        </button> -->
+            
         </div> 
     </div>
 </template>
@@ -22,7 +19,7 @@ export default {
   
     data() {
         return {
-            
+            periods:[1, 2, 4, 5]
             
 
         }
