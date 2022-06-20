@@ -1,12 +1,10 @@
 <template>
-<div class="p-t-8 px-8 mt-8">
-    <select v-model="period">
-    <option></option>
-    </select>
-    <div class= "w-3/4  px-5 trunicate text-center rounded-t-3xl h-24 bg-green-500">
-        <button @click="previous()" class=" text-black float-left  text-xl font-bold"> &lt; </button>
-        <h1 class="text-xl text-white font-bold">SEMESTER {{ semester }} Period: {{ period }} </h1>
-        <button @click="next()" class="float-right text-xl text-black font-bold "> > </button>
+<div class="p-t-8 w-3/4  px-9 mt-8">
+   
+    <div class= "grid grid-cols-10 py-5 text-white   px-1 trunicate text-center rounded-t-3xl h-24 bg-green-500">
+        <button @click="previous()" class="col-span-1 text-4xl font-bold"> &lt; </button>
+        <h1 class="text-bold w-full col-span-8 text-3xl">SEMESTER {{ semester }}</h1>
+        <button @click="next()" class="text-4xl font-bold col-span-1"> > </button>
     </div>        
  </div>
   
@@ -17,7 +15,7 @@
 export default {
     name: 'Toggle',
     props: {
-        period: Intl,
+        this_period: Intl,
         semester: Intl,
     },
    
