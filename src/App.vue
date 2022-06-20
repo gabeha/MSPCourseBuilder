@@ -14,22 +14,31 @@
       <div class="bg-white relative rounded-2xl h-10 w-full text-xl px-5 mx-auto ">
           <!-- <progress value=30 max="180" class="absolute overflow-hidden w-full right-0  h-full"  > -->
           <h1 class="mx-auto absolute inline-block text-black mb-7">CREDITS: </h1>
-          <h1 class="mx-auto absolute right-5  text-black inline-block pr-3  mb-7"> {{ credits }} / 180 total </h1>
+          <h1 class="mx-auto absolute right-5  text-black inline-block pr-3  mb-7"> {{ this.credits }} / 180 total </h1>
       <!-- </progress> -->
       </div>
-   <Reqs  :choices='choices' :mathreq="mathreq" :lasreq="lasreq" :advanced="advanced" :advancedp="advancedp" :intro="intro" :introp="introp" />
+   <Reqs :choices='choices' :mathreq="this.mathreq" :lasreq="this.lasreq" :advanced="this.advanced" :advancedp="advancedp" :intro="intro" :introp="introp" />
       <Choice :this_period="this_period" :this_semester="this_semester" :choices='choices' @deletechoice="deleteChoice"  />
     </div>
-    <!-- <div class="max-w-max my-1" v-for="m in modules" :key="m.id">
-    
-       <Button @select="add" :subject="m.subject" :code="m.code" />
-    </div> -->
-    </div>
+  </div>
+    <!-- <div class="grid gap-4 grid-cols-3 grid-flow-row-dense md:gridcols-2 w-3/4 bg-white rounded-3xl truncate  p-8" >
+        <div class="relative block h-14 rounded-3xl w-full bg-gray-100 py-2 col-span-3  row-span-1">
+                <h2 class="text-black rounded-t-xl text-2xl text-center tracking-widest" >PERIOD  {{ this_period }} </h2>
+        </div>  
+            <div :class="(subject == 'PRA') ? 'col-span-3' : 'col-span-1'" class="bg-gray-100 m-3  rounded-3xl" v-for= "(subject, index) in sub" :key="index" >
+                <button v-for="(subject, index) in sub" :key="index"  class="h-12 m-3 rounded-full text-xl relative-top-4 w-full text-center bg-gray-200 mx-auto">
+                    {{ subject  }} 
+                </button> 
+                <div class="grid grid-cols-4">
+                <Button v-show="module.subject in sub&& module.period == this_period" @select="matchModules" :module="module"  />
+            </div>
+            </div> 
+      </div> -->
 </template>
 
 
 <script>
-import { supabase } from "./supabase.js"
+import { supabase } from "./supabase.js";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import Semester from './components/Semester.vue';
@@ -51,12 +60,12 @@ export default {
   data() {
     return {
       modules: [],
-      
       courses: [],
       practicals: [],
       choices: [],
       this_period: 4,
       this_semester: 2,
+      sub: ['BIO', 'CHE', 'PHY', 'INT', 'NEU', 'MAT', 'PRA'],
        // returned from nextPeriodSemester and previousPeriodSemester
       // counts the number of fullfilled reqs ++ when addChoice -- when deleteChoice
       mathreq: 0,
@@ -88,7 +97,7 @@ export default {
       this.practicals = response.data;
       console.log(this.practicals)
     },
-   async fetchAllModules() {
+    async fetchAllModules() {
       const response = await supabase
         .from('modules')
         .select()
@@ -111,11 +120,9 @@ export default {
           element.end3 = new Date(element.end3);
         }
       });
-      
      return this.modules
-    
     },
-    //--------------------------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------------------------------
     // matchModules(selectedModule) {
 
     //   // console.log(selectedModule.code)
@@ -161,98 +168,175 @@ export default {
 //--------------------------------------------------------------------------------------------
 
     
-    matchModules(id, subject, code, start1, end1, start2, end2, start3, end3, period,  coreq, prereq) {
-      const p = this.this_period
-      if (subject == 'PRA') {
-        this.modules = this.modules.filter(function (practical) {
-          return practical.subject !== 'PRA' || practical.period !== p
-        })
-        this.modules = this.modules.filter(function (course) {
-          const rc1 = moment.range(course.start1, course.end1)
-          const rc2 = moment.range(course.start2, course.end2)
-          const rp1 = moment.range(start1, end1)
-          // console.log(start2!==null)
-          if (start3 !== null) {
-            const rp2 = moment.range(start2, end2);
-            const rp3 = moment.range(start3, end3)
-            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
-            //   || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
-              || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)) || course.period !== p)
-          }
-          if ((start3 == null) && (start2 !== null)) {
-            const rp2 = moment.range(start2, end2);
-            // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
-            // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-            // console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+    // matchModules(id, subject, code, start1, end1, start2, end2, start3, end3, period,  coreq, prereq) {
+    // const p = this.this_period
+    //   if (subject == 'PRA') {
+    //     this.modules = this.modules.filter(function (practical) {
+    //       return practical.subject !== 'PRA' || practical.period !== p
+    //     })
+    //     this.modules = this.modules.filter(function (course) {
+    //       const rc1 = moment.range(course.start1, course.end1)
+    //       const rc2 = moment.range(course.start2, course.end2)
+    //       const rp1 = moment.range(start1, end1)
+    //       // console.log(start2!==null)
+    //       if (start3 !== null) {
+    //         const rp2 = moment.range(start2, end2);
+    //         const rp3 = moment.range(start3, end3)
+    //         // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //         //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+    //         //   || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+    //           || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)) || course.period !== p)
+    //       }
+    //       if ((start3 == null) && (start2 !== null)) {
+    //         const rp2 = moment.range(start2, end2);
+    //         // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //         // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //         // console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //         //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
 
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) || course.period !== p)
-            // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-          }
-          if (start2 == null) {
-            // console.log(rp1)
-            // console.log(rc2.overlaps(rp1))
-            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) || course.period !== p)
+    //         // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+    //         // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //       }
+    //       if (start2 == null) {
+    //         // console.log(rp1)
+    //         // console.log(rc2.overlaps(rp1))
+    //         // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
 
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) || course.period !== p)
-          }
-        })
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) || course.period !== p)
+    //       }
+    //     })
+    //   }
+    //   else {
+    //     this.modules = this.modules.filter(function (course) {
+    //       const rc1 = moment.range(course.start1, course.end1)
+    //       const rc2 = moment.range(course.start2, course.end2)
+    //       const rp1 = moment.range(start1, end1);
+    //       const rp2 = moment.range(start2, end2);
+    //       return (!(rc1.overlaps(rp1) || rc1.overlaps(rp2)) || !(rc2.overlaps(rp1) || rc2.overlaps(rp2)) || course.period !== p)
+    //     })
+    //     this.modules = this.modules.filter(function (course) {
+    //       const rc1 = moment.range(start1, end1)
+    //       const rc2 = moment.range(start2, end2)
+    //       const rp1 = moment.range(course.start1, course.end1)
+    //       // console.log(start2!==null)
+    //       if (course.start3 !== null) {
+    //         const rp2 = moment.range(course.start2, course.end2);
+    //         const rp3 = moment.range(course.start3, course.end3);
+    //         // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //         //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+    //         //   || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+    //           || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)) || course.period !== p)
+    //       }
+    //       if ((course.start3 == null) && (course.start2 !== null)) {
+    //         const rp2 = moment.range(course.start2, course.end2);
+    //         // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //         // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //         // console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //         //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+    //           || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) || course.period !== p)
+    //         // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+    //         // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+    //       }
+    //       if (course.start2 == null) {
+    //         // console.log(rp1)
+    //         // console.log(rc2.overlaps(rp1))
+    //         // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+    //         return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) || course.period !== p)
+    //       }
+    //     })
+    //   }
+    //   this.addChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period,  coreq, prereq)
+
+    // },
+    
+    // 
+    matchModules(selectedModule) {
+      const thisperiod = this.this_period
+          
+      // console.log(selectedModule.code)
+
+      // ----- Scenario 1: Practical was selected, show all courses available for selection
+
+      if (selectedModule.subject == 'PRA') {
+        
+        // We dont want to remove them now APPARENTELY
+        // // Step 1: remove all other practicals from availability list
+        // this.modules = this.modules.filter(function(practical) {
+        //  return practical.subject !== 'PRA'
+        // })
+
+        // Step 2: compare timeslot for each course in the availability list and remove overlapping ones
+        this.modules = this.modules.filter(courseInTheTable => this.filterOutPractical(courseInTheTable, selectedModule))
       }
+
+      // ----- Scenario 2: Course was selected, show all practicals and courses available for selection
       else {
-        this.modules = this.modules.filter(function (course) {
-          const rc1 = moment.range(course.start1, course.end1)
-          const rc2 = moment.range(course.start2, course.end2)
-          const rp1 = moment.range(start1, end1);
-          const rp2 = moment.range(start2, end2);
-          return (!(rc1.overlaps(rp1) || rc1.overlaps(rp2)) || !(rc2.overlaps(rp1) || rc2.overlaps(rp2)) || course.period !== p)
-        })
-        this.modules = this.modules.filter(function (course) {
-          const rc1 = moment.range(start1, end1)
-          const rc2 = moment.range(start2, end2)
-          const rp1 = moment.range(course.start1, course.end1)
-          // console.log(start2!==null)
-          if (course.start3 !== null) {
-            const rp2 = moment.range(course.start2, course.end2);
-            const rp3 = moment.range(course.start3, course.end3);
-            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
-            //   || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
-              || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)) || course.period !== p)
-          }
-          if ((course.start3 == null) && (course.start2 !== null)) {
-            const rp2 = moment.range(course.start2, course.end2);
-            // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
-            // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-            // console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
 
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
-              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) || course.period !== p)
-            // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
-            // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
-          }
-          if (course.start2 == null) {
-            // console.log(rp1)
-            // console.log(rc2.overlaps(rp1))
-            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
-            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) || course.period !== p)
-          }
+        // show all available courses
+        this.modules = this.modules.filter(function(course) {
+
+        // get timeslots for the course from the list of available courses
+          const rangeCourseDay1 = moment.range(course.start1, course.end1)
+          const rangeCourseDay2 = moment.range(course.start2, course.end2)
+
+        // get timeslots of the course that was selected (input course)
+          const rangePracticalDay1 = moment.range(selectedModule.start1, selectedModule.end1);
+          const rangePracticalDay2 = moment.range(selectedModule.start2, selectedModule.end2);
+
+          // if at least one timeslot overlaps -> remove course
+          return (!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay1.overlaps(rangePracticalDay2)) || !(rangeCourseDay2.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay2)) || course.period !== thisperiod)
         })
+
+        // show all available practicals
+        this.modules = this.modules.filter(practicalInTheTable => this.filterOutPractical(selectedModule, practicalInTheTable))
       }
-      this.addChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period,  coreq, prereq)
+      this.addChoice(selectedModule.id, selectedModule.subject, selectedModule.code, selectedModule.start1, selectedModule.end1, selectedModule.start2, selectedModule.end2, selectedModule.start3, selectedModule.end3, selectedModule.period, selectedModule.hascoreq, selectedModule.hasprereq);
 
+      return this.modules
     },
-   
-    addChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period, coreq, prereq, semester, thisperiod) {
+    filterOutPractical(course, practical){
+      const thisperiod = this.this_period
+      {   
+      // get timeslots of the course 
+      const rangeCourseDay1 = moment.range(course.start1, course.end1)
+      const rangeCourseDay2 = moment.range(course.start2, course.end2)
+        // get the timeslot for the first day when the practical is offered
+      const rangePracticalDay1 = moment.range(practical.start1, practical.end1)
+      // if the practical is only offered on one day
+        if (practical.start2 == null) 
+        {
+        return (!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay1)) || course.period!==thisperiod || practical.period!==thisperiod)
+      }
+
+      // if the practical is offered on two different days
+      if ((practical.start3 == null) && (practical.start2 !== null)) {
+        const rangePracticalDay2 = moment.range(practical.start2, practical.end2);
+
+        return(!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay1)) 
+        || !(rangeCourseDay1.overlaps(rangePracticalDay2) || rangeCourseDay2.overlaps(rangePracticalDay2))|| course.period!==thisperiod || practical.period!==thisperiod)
+
+      }
+
+      // if the practical is offered on three different days
+      if (practical.start3 !== null) {
+        const rangePracticalDay2 = moment.range(practical.start2, practical.end2);
+        const rangePracticalDay3 = moment.range(practical.start3, practical.end3);
+
+        return (!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay1)) 
+        || !(rangeCourseDay1.overlaps(rangePracticalDay2) || rangeCourseDay2.overlaps(rangePracticalDay2)) 
+        || !(rangeCourseDay1.overlaps(rangePracticalDay3) || rangeCourseDay2.overlaps(rangePracticalDay3))|| course.period!==thisperiod || practical.period!==thisperiod)
+      }}},
+    addChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period, coreq, prereq) {
       const choice = {
-        id: id,
+       id: id,
         subject: subject,
         code: code,
         start1: start1,
@@ -266,10 +350,11 @@ export default {
         prereq: prereq,
         thissemester: this.this_semester,
         selectionperiod: this.this_period
-      };
-      // addChoice(id) {
-      //   const choice = this.modules.filter((module) => module.id == id)
+    };
+      // const choice = {
+
       this.choices = [...this.choices, choice]
+
       console.log(this.choices)
       if (choice.subject == 'PRA') {
         this.credits += 5 / 2

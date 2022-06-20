@@ -7,7 +7,7 @@
             <div :class="(subject == 'PRA') ? 'col-span-3' : 'col-span-1'" class="bg-gray-100 m-3  rounded-3xl" v-for="(subject, index) in sub" :key="index">
                 <button  class="h-12 m-3 rounded-full text-xl relative -top-4 w-full text-center bg-gray-200 mx-auto">
                     {{ subject }} 
-                </button>       
+                </button>       s
                 <div class="grid grid-cols-4"> 
                     <button  v-for="module in modules" v-show="module.subject == subject && module.period == this_period" :key="module.id" 
                     class="relative m-3 h-9 w-10/12 min-w-min bg-white text-start rounded-full"
@@ -17,7 +17,7 @@
                                     : (module.subject === 'MAT') ? 'text-red-400 col-span-2 '
                                     : (module.subject === 'INT') ? 'text-indigo-400 col-span-2 '
                                     : (module.subject === 'NEU') ? 'text-rose-300 col-span-2 '
-                                    :'text-slate-600 col-span-1'" @click="makeChoice(module.id, module.subject, module.code, module.start1, module.end1, module.start2, module.end2, module.start3, module.end3, module.period, module.hascorec, module.hasprerec)">
+                                    :'text-slate-600 col-span-1'" @click="makeChoice(module)">
                                     <p class="font-bold h-16 mx-auto absolute left-0 top-0 text-s w-3/4 break-words text-leftinline"> {{module.subject}}{{module.code}} {{module.hascorec}} </p>
                               
                         <span class="w-1/4 h-9 block rounded-r-full absolute top-0 right-0 " :class="(module.subject === 'BIO') ? 'bg-green-500  col-span-1 row-span-1'
@@ -43,7 +43,6 @@ import Choice from './Choice.vue'
 export default {
     name: 'Semester',
     props: {
-        index: Number,
         modules: Object,
         this_period: Number, 
         this_semester: Number,
@@ -59,8 +58,8 @@ export default {
         }
     },
     methods: {
-        makeChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period, coreq, prereq) {
-            this.$emit("makechoice", id, subject, code, start1, end1, start2, end2, start3, end3, period, coreq, prereq)
+        makeChoice(selected) {
+            this.$emit("makechoice", selected)
         },
     }
 }
