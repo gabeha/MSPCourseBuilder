@@ -1,178 +1,528 @@
 <template>
-<div class="mx-40">
-    <div class="grid grid-cols-3 text-center">
-      <div>
-        <h1 class="font-bold text-lg m-4">First Course Choice</h1>
-        <div class="flex flex-wrap justify-center items-center overflow-auto">
-          <div v-for="course in courses" :key="course.course_id" >
-            <button :class = "(course.subject === 'BIO')?'bg-green-300'
-                              : (course.subject === 'CHE')?'bg-gray-300'
-                              : (course.subject === 'HUM')?'bg-purple-300'
-                              : (course.subject === 'INT')?'bg-cyan-300'
-                              : (course.subject === 'MAT')?'bg-red-300'
-                              : (course.subject === 'PHY')?'bg-blue-300'
-                              : (course.subject === 'NEU')?'bg-orange-300'
-                              :'bg-slate-50'"         
-            
-            class="outline-none rounded-md shadow-md m-1 px-3 py-1 hover:bg-slate-200 active:bg-slate-300 focus:outline-none focus:ring focus:ring-slate-600" @click="getAvailableCourses(course.course_id)">{{course.subject}}{{course.code}}</button>
-          </div>
-        </div>
+  <div>
+    <!-- Header that displays the semester nr, and buttons to change periods -->
+    <Toggle @nextperiod="nextPeriodSemester" @lastperiod="previousPeriodSemester" :this_semester="this_semester" />
+    <Semester :modules='modules' :this_semester="this_semester" :this_period="this_period" @makechoice="matchModules"  />
+    <div class="p-t-8 px-8 mt-8">
+   
+    <div class= "w-1/4 right-0 top-9 px-5 fixed trunicate  text-center pt-8 rounded-t-3xl h-24 bg-gray-300">
+        <h1 class="text-bold text-black text-3xl">TRACKER</h1>
+    </div>        
+ </div>
+ <!-- Displays the progress on the student meeting their graduation requirements -->
+    <div class="w-1/4 fixed  top-40 p-5 right-0 rounded-3xl h-full mb-12 bg-gray-200">
+      <div class="bg-white relative rounded-2xl h-10 w-full text-xl px-5 mx-auto ">
+          <!-- <progress value=30 max="180" class="absolute overflow-hidden w-full right-0  h-full"  > -->
+          <h1 class="mx-auto absolute inline-block text-black mb-7">CREDITS: </h1>
+          <h1 class="mx-auto absolute right-5  text-black inline-block pr-3  mb-7"> {{ credits }} / 180 total </h1>
+      <!-- </progress> -->
       </div>
-
-      
-        <div>
-          <h1 class="font-bold text-lg m-4">Second Course Choice</h1>
-          <div class="flex flex-wrap justify-center items-center overflow-auto">
-            <TransitionGroup name="list" tag="ul" class="flex flex-wrap justify-center items-center overflow-hidden">
-              
-              <div v-for="course in available_courses" :key="course.f_course_id">
-              <button class="bg-slate-50 outline-none rounded-md shadow-md m-1 px-3 py-1 hover:bg-slate-200 active:bg-slate-300 focus:outline-none focus:ring focus:ring-slate-600" @click="getAvailablePracticals(course.f_course_id)">{{course.f_subject}}{{course.f_code}}</button>
-            </div>
-              
-            </TransitionGroup>
-          </div>
-        </div>
-
-      <div>
-        <h1 class="font-bold text-lg m-4">Practical Choice</h1>
-        <div class="flex flex-wrap justify-center items-center overflow-auto">
-        <div v-for="practical in practicals" :key="practical.f_practical_id">
-          <button class="bg-slate-50 outline-none rounded-md shadow-md m-1 px-3 py-1 hover:bg-slate-200 active:bg-slate-300 focus:outline-none focus:ring focus:ring-slate-600" @click="logChoices(practical.f_practical_id)">{{practical.f_subject}}{{practical.f_code}}</button>
-        </div>
-        </div>
-        </div>  
-  </div>
-
-  <div class="flex justify-center items-center flex-col">
-    <h1 class="font-bold text-lg m-4">Your choices:</h1>
-    <div v-for="course in chosen_courses" :key="course.course_id">
-        <div>
-          <h3>{{course.subject}}{{course.code}}</h3>
-        </div>
+   <Reqs  :choices='choices' :mathreq="mathreq" :lasreq="lasreq" :advanced="advanced" :advancedp="advancedp" :intro="intro" :introp="introp" />
+      <Choice :this_period="this_period" :this_semester="this_semester" :choices='choices' @deletechoice="deleteChoice"  />
     </div>
-    <div v-for="practical in chosen_practicals" :key="practical.practicals_id">
-        <div>
-          <h3>{{practical.subject}}{{practical.code}}</h3>
-        </div>
+    <!-- <div class="max-w-max my-1" v-for="m in modules" :key="m.id">
+    
+       <Button @select="add" :subject="m.subject" :code="m.code" />
+    </div> -->
     </div>
-
-  </div>
-</div>
 </template>
 
+
 <script>
-// import { ref } from "vue"
 import { supabase } from "./supabase.js"
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import Semester from './components/Semester.vue';
+import Toggle from './components/Toggle.vue'
+import Choice from './components/Choice.vue'
+import Reqs from './components/Reqs.vue'
+import Button from './components/Button.vue'
 
-
+const moment = extendMoment(Moment);
 export default {
   name: 'App',
   components: {
-    
+    Semester,
+    Toggle,
+    Choice,
+    Button,
+    Reqs
   },
   data() {
     return {
-      chosen_block: 1,
-      block_id_1: null,
-      block_id_2: null,
-      course_id_1: null,
-      course_id_2: null,
-      practical_id: null,
+      modules: [],
+      
       courses: [],
-      available_courses: [],
       practicals: [],
-
-      chosen_courses: [],
-      chosen_practicals: []
+      choices: [],
+      this_period: 4,
+      this_semester: 2,
+       // returned from nextPeriodSemester and previousPeriodSemester
+      // counts the number of fullfilled reqs ++ when addChoice -- when deleteChoice
+      mathreq: 0,
+      lasreq: 0,
+      advanced: 0,
+      intro: 0,
+      advancedp: 0,
+      introp: 0,
+      credits: 30
     }
   },
+
   mounted() {
-    this.fetchAllCourses();
-    
+    this.fetchAllModules();
   },
+
   methods: {
+    // Fetching everything ----------------------------------------------------------------------------------
     async fetchAllCourses() {
       const response = await supabase
         .from('courses')
         .select()
-      this.courses = response.data
-      this.courses.sort((a, b) => a.subject.localeCompare(b.subject))
-
-      console.log(this.courses)
+      this.courses = response.data;
     },
-    async getAvailableCourses(course_id) {
-      this.course_id_1 = course_id;
-      const response_block = await supabase
-        .from('courses_join_practicals')
-        .select('block_id')
-        .eq('course_id', course_id);
-
-      this.block_id_1 = response_block.data[0].block_id;
-
-      // console.log(this.block_id_1)
-
-      const response_courses = await supabase.rpc(`courses_${this.block_id_1}`);
-      this.available_courses = response_courses.data;
-      this.available_courses.sort();
-      // console.log(this.available_courses)
-    },
-    async getAvailablePracticals(course_id) {
-      this.course_id_2 = course_id;
-      const response_block = await supabase
-        .from('courses_join_practicals')
-        .select('block_id')
-        .eq('course_id', course_id);
-
-      // console.log(response_block)
-      this.block_id_2 = response_block.data[0].block_id;
-
-      // console.log(this.block_id_2)
-
-      if (this.block_id_1 < this.block_id_2) {
-        const response = await supabase.rpc(`practicals_${this.block_id_1}_${this.block_id_2}`);
-        this.practicals = response.data;
-      }
-      else {
-        const response = await supabase.rpc(`practicals_${this.block_id_2}_${this.block_id_1}`);
-        this.practicals = response.data;
-      }
-
-      console.log(this.practicals)
-    },
-    async logChoices(practical_id) {
-      this.practical_id = practical_id;
-      const response_c = await supabase
-        .from('courses')
-        .select()
-        .or(`course_id.eq.${this.course_id_1}, course_id.eq.${this.course_id_2}`)
-
-      // console.log(response_c)
-      this.chosen_courses = response_c.data;
-
-      const response_p = await supabase
+    async fetchAllPracticals() {
+      const response = await supabase
         .from('practicals')
         .select()
-        .eq('practical_id', this.practical_id)
+      this.practicals = response.data;
+      console.log(this.practicals)
+    },
+   async fetchAllModules() {
+      const response = await supabase
+        .from('modules')
+        .select()
+        // .eq('period', 4)
+      this.modules = response.data;
+      console.log(this.modules)
+      this.modules.forEach(element => {
+        if (element.start1 != null) {
+          element.start1 = new Date(element.start1);
+          element.end1 = new Date(element.end1);
+        }
+        // element.start1 = new Date(element.start1);
+        // element.end1 = new Date(element.end1);
+        if (element.start2 != null) {
+          element.start2 = new Date(element.start2);
+          element.end2 = new Date(element.end2);
+        }
+        if (element.start3 != null) {
+          element.start3 = new Date(element.start3);
+          element.end3 = new Date(element.end3);
+        }
+      });
+      
+     return this.modules
+    
+    },
+    //--------------------------------------------------------------------------------------------------------
+    // matchModules(selectedModule) {
 
-      this.chosen_practicals = response_p.data;
+    //   // console.log(selectedModule.code)
 
-      // console.log(this.chosen_courses)
-      console.log(this.chosen_practicals)
-    }
-    }
+    //   // ----- Scenario 1: Practical was selected, show all courses available for selection
+
+    //   if (selectedModule.subject == 'PRA') {
+        
+    //     // We dont want to remove them now APPARENTELY
+    //     // // Step 1: remove all other practicals from availability list
+    //     // this.modules = this.modules.filter(function(practical) {
+    //     //  return practical.subject !== 'PRA'
+    //     // })
+
+    //     // Step 2: compare timeslot for each course in the availability list and remove overlapping ones
+    //     this.modules = this.modules.filter(courseInTheTable => this.filterOutPractical(courseInTheTable, selectedModule))
+    //   }
+
+    //   // ----- Scenario 2: Course was selected, show all practicals and courses available for selection
+    //   else {
+
+    //     // show all available courses
+    //     this.modules = this.modules.filter(function(course) {
+
+    //     // get timeslots for the course from the list of available courses
+    //       const rangeCourseDay1 = moment.range(course.start1, course.end1)
+    //       const rangeCourseDay2 = moment.range(course.start2, course.end2)
+
+    //     // get timeslots of the course that was selected (input course)
+    //       const rangePracticalDay1 = moment.range(selectedModule.start1, selectedModule.end1);
+    //       const rangePracticalDay2 = moment.range(selectedModule.start2, selectedModule.end2);
+
+    //       // if at least one timeslot overlaps -> remove course
+    //       return (!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay1.overlaps(rangePracticalDay2)) || !(rangeCourseDay2.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay2)))
+    //     })
+
+    //     // show all available practicals
+    //     this.modules = this.modules.filter(practicalInTheTable => this.filterOutPractical(selectedModule, practicalInTheTable))
+    //   }
+    //   this.addChoice(selectedModule.id, selectedModule.subject, selectedModule.code);
+    //   return this.modules
+    // },
+//--------------------------------------------------------------------------------------------
+
+    
+    matchModules(id, subject, code, start1, end1, start2, end2, start3, end3, period,  coreq, prereq) {
+      const p = this.this_period
+      if (subject == 'PRA') {
+        this.modules = this.modules.filter(function (practical) {
+          return practical.subject !== 'PRA' || practical.period !== p
+        })
+        this.modules = this.modules.filter(function (course) {
+          const rc1 = moment.range(course.start1, course.end1)
+          const rc2 = moment.range(course.start2, course.end2)
+          const rp1 = moment.range(start1, end1)
+          // console.log(start2!==null)
+          if (start3 !== null) {
+            const rp2 = moment.range(start2, end2);
+            const rp3 = moment.range(start3, end3)
+            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+            //   || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+              || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)) || course.period !== p)
+          }
+          if ((start3 == null) && (start2 !== null)) {
+            const rp2 = moment.range(start2, end2);
+            // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+            // console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) || course.period !== p)
+            // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+          }
+          if (start2 == null) {
+            // console.log(rp1)
+            // console.log(rc2.overlaps(rp1))
+            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) || course.period !== p)
+          }
+        })
+      }
+      else {
+        this.modules = this.modules.filter(function (course) {
+          const rc1 = moment.range(course.start1, course.end1)
+          const rc2 = moment.range(course.start2, course.end2)
+          const rp1 = moment.range(start1, end1);
+          const rp2 = moment.range(start2, end2);
+          return (!(rc1.overlaps(rp1) || rc1.overlaps(rp2)) || !(rc2.overlaps(rp1) || rc2.overlaps(rp2)) || course.period !== p)
+        })
+        this.modules = this.modules.filter(function (course) {
+          const rc1 = moment.range(start1, end1)
+          const rc2 = moment.range(start2, end2)
+          const rp1 = moment.range(course.start1, course.end1)
+          // console.log(start2!==null)
+          if (course.start3 !== null) {
+            const rp2 = moment.range(course.start2, course.end2);
+            const rp3 = moment.range(course.start3, course.end3);
+            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+            //   || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)))
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))
+              || !(rc1.overlaps(rp3) || rc2.overlaps(rp3)) || course.period !== p)
+          }
+          if ((course.start3 == null) && (course.start2 !== null)) {
+            const rp2 = moment.range(course.start2, course.end2);
+            // console.log((rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            // console.log((rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+            // console.log((!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+            //   || !(rc1.overlaps(rp2) || rc2.overlaps(rp2))))
+
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1))
+              || !(rc1.overlaps(rp2) || rc2.overlaps(rp2)) || course.period !== p)
+            // return(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) 
+            // || (rc1.overlaps(rp2) || rc2.overlaps(rp2)))
+          }
+          if (course.start2 == null) {
+            // console.log(rp1)
+            // console.log(rc2.overlaps(rp1))
+            // console.log(!(rc1.overlaps(rp1) || rc2.overlaps(rp1)))
+            return (!(rc1.overlaps(rp1) || rc2.overlaps(rp1)) || course.period !== p)
+          }
+        })
+      }
+      this.addChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period,  coreq, prereq)
+
+    },
+   
+    addChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period, coreq, prereq, semester, thisperiod) {
+      const choice = {
+        id: id,
+        subject: subject,
+        code: code,
+        start1: start1,
+        end1: end1,
+        start2: start2,
+        end2: end2,
+        start3: start3,
+        end3: end3,
+        period: period,
+        coreq: coreq,
+        prereq: prereq,
+        thissemester: this.this_semester,
+        selectionperiod: this.this_period
+      };
+      // addChoice(id) {
+      //   const choice = this.modules.filter((module) => module.id == id)
+      this.choices = [...this.choices, choice]
+      console.log(this.choices)
+      if (choice.subject == 'PRA') {
+        this.credits += 5 / 2
+        if (choice.code > 3000) {
+          this.advancedp++
+        } else if (choice.code < 2000) {
+          this.introp++
+        } else {
+          this.advancedp = this.advancedp
+          this.introp = this.introp
+        }
+      }
+      else {
+        this.credits += 5
+        if (choice.subject == 'ÍNT') {
+          if (cchoice.ode == 3001) {
+            this.lasreq++
+            this.advanced++
+          } else if (choice.code == 2007) {
+            this.lasreq++
+          } else {
+            if (choice.code > 3000) {
+              this.advanced++
+            } else if (choice.code < 2000) {
+              this.intro++
+            } else {
+              this.advanced = this.advanced
+              this.intro = this.intro
+            }
+          }
+        } else if (choice.subject == 'HUM') {
+          this.lasreq++
+        } else if (choice.subject == 'MAT') {
+          this.mathreq++
+          if (choice.code == '3001') {
+            this.lasreq++
+            this.advanced++
+          } else if (choice.code == '2007') {
+            this.lasreq++
+          } else {
+            if (choice.code > 3000) {
+              this.advanced++
+            } else if (code < 2000) {
+              this.intro++
+            } else {
+              this.advanced = this.advanced
+              this.intro = this.intro
+            }
+          }
+        } else {
+          this.mathreq = this.mathreq
+          this.lasreq = this.lasreq
+          if (code == '3001') {
+            this.lasreq++
+            this.advanced++
+          } else if (code == '2007') {
+            this.lasreq++
+          } else {
+            if (code > 3000) {
+              this.advanced++
+            } else if (code < 2000) {
+              this.intro++
+            } else {
+              this.advanced = this.advanced
+              this.intro = this.intro
+            }
+          }
+        }
+      }
+    },
+
+
+    async deleteChoice(id, subject, code, start1, end1, start2, end2, start3, end3, period, semester, thisperiod) {
+      const module = {
+        id: id,
+        subject: subject,
+        code: code,
+        start1: start1,
+        end1: end1,
+        start2: start2,
+        end2: end2,
+        start3: start3,
+        end3: end3,
+        period: period,
+        semester: semester,
+        selectionperiod: thisperiod
+      };
+    
+      this.choices = this.choices.filter((choice) => choice.id !== id) // removes choice from choices array
+      this.modules = [...this.modules, module]
+
+      const renew = await supabase
+            .from('modules')
+            .select()
+            // .eq('period', 4)
+          this.modules = renew.data;
+          this.modules.filter(module => (module in this.choices))
+          this.modules.forEach(element => {
+            if (element.start1 != null) {
+              element.start1 = new Date(element.start1);
+              element.end1 = new Date(element.end1);
+            }
+            // element.start1 = new Date(element.start1);
+            // element.end1 = new Date(element.end1);
+            if (element.start2 != null) {
+              element.start2 = new Date(element.start2);
+              element.end2 = new Date(element.end2);
+            }
+            if (element.start3 != null) {
+              element.start3 = new Date(element.start3);
+              element.end3 = new Date(element.end3);
+            }
+          })
+
+      if (subject == 'PRA') {
+        this.credits -= 5 / 2
+        if (code > 3000) {
+          this.advancedp--
+        } else if (code < 2000) {
+          this.introp--
+        } else {
+          this.advancedp = this.advancedp
+          this.introp = this.introp
+        }
+      } else {
+        this.credits -= 5
+        if (subject == 'ÍNT') {
+          if (choice.code == 3001) {
+            this.lasreq--
+            this.advanced--
+          } else if (choice.code == 2007) {
+            this.lasreq--
+          } else {
+            if (choice.code > 3000) {
+              this.advanced--
+            } else if (choice.code < 2000) {
+              this.intro--
+            } else {
+              this.advanced = this.advanced
+              this.intro = this.intro
+            }
+          }
+        } else if (subject == 'HUM') {
+          this.lasreq--
+        } else if (subject == 'MAT') {
+          this.mathreq--
+          if (code == '3001') {
+            this.lasreq--
+            this.advanced--
+          } else if (code == '2007') {
+            this.lasreq--
+          } else {
+            if (code > 3000) {
+              this.advanced--
+            } else if (code < 2000) {
+              this.intro--
+            } else {
+              this.advanced = this.advanced
+              this.intro = this.intro
+            }
+          }
+        } else {
+          this.mathreq = this.mathreq
+          this.lasreq = this.lasreq
+          if (code == '3001') {
+            this.lasreq--
+            this.advanced--
+          } else if (code == '2007') {
+            this.lasreq--
+          } else {
+            if (code > 3000) {
+              this.advanced--
+            } else if (code < 2000) {
+              this.intro--
+            } else {
+              this.advanced = this.advanced
+              this.intro = this.intro
+            }
+          }
+        }
+      }
+    },
+   async nextPeriodSemester() {
+      if (this.this_semester < 6) {
+        if (this.this_period == 2) {// period 2 is the last period of every uneven semester 
+          this.this_semester++
+          this.this_period = 4
+          this.credits+=1
+        } else if (this.this_period == 5) { // period 5 is the last period of every even semester 
+          this.this_semester++
+          this.this_period = 1
+          this.credits+=1
+          const renew = await supabase
+            .from('modules')
+            .select()
+            // .eq('period', 4)
+          this.modules = renew.data;
+          this.modules.filter(module => (module in this.choices))
+          this.modules.forEach(element => {
+            if (element.start1 != null) {
+              element.start1 = new Date(element.start1);
+              element.end1 = new Date(element.end1);
+            }
+            // element.start1 = new Date(element.start1);
+            // element.end1 = new Date(element.end1);
+            if (element.start2 != null) {
+              element.start2 = new Date(element.start2);
+              element.end2 = new Date(element.end2);
+            }
+            if (element.start3 != null) {
+              element.start3 = new Date(element.start3);
+              element.end3 = new Date(element.end3);
+            }
+          }
+          )
+        } else {
+          this.this_period++
+        }
+      } else {
+        this.this_semester = 6 // assume semester 6 is last semester, this is how we prevent further semesters
+        if (this.this_period == 4) {
+          this.this_period = 5
+        } else {
+          this.this_period = 5
+
+        }
+      }
+    },
+    previousPeriodSemester() {
+      if (this.this_semester > 2) {
+        if (this.this_period == 4) {
+          this.this_semester--
+          this.this_period = 2
+        } else if (this.this_period == 1) {
+          this.this_semester--
+          this.this_period = 5
+        } else {
+          this.this_period--
+        }
+      } else {
+        this.this_semester = 2
+        if (this.this_period == 5) {
+          this.this_period = 4
+        } else {
+          this.this_period = 4
+        }
+      }
+    },
+
   }
+    }  
+ 
+
+
 </script>
-
-<style>
-
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-</style>
+  
