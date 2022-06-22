@@ -48,11 +48,12 @@ export default {
       modules: [],
       courses: [],
       practicals: [],
-      choices: []
+      choices: [],
+      testListOfAvailableModules: []
     }
   },
   mounted() {
-    this.matchModules()
+    // this.matchModules()
     // this.retrieveTest();
     this.fetchAllModules();
     // this.fetchAllCourses();
@@ -83,6 +84,8 @@ TODO: refactor! the functions used for filtering can be extracted to improve rea
 
     matchModules(selectedModule) {
 
+      // console.log(selectedModule.code)
+
       // ----- Scenario 1: Practical was selected, show all courses available for selection
 
       if (selectedModule.subject == 'PRA') {
@@ -92,8 +95,8 @@ TODO: refactor! the functions used for filtering can be extracted to improve rea
          return practical.subject !== 'PRA'
         })
 
-        // Step 2: compare timeslot for each course in the availability list and remove overalapping ones
-        this.modules = this.modules.filter(courseInTheTable => filterOutPractical(courseInTheTable, selectedModule))
+        // Step 2: compare timeslot for each course in the availability list and remove overlapping ones
+        this.modules = this.modules.filter(courseInTheTable => this.filterOutPractical(courseInTheTable, selectedModule))
       }
 
       // ----- Scenario 2: Course was selected, show all practicals and courses available for selection
@@ -115,18 +118,15 @@ TODO: refactor! the functions used for filtering can be extracted to improve rea
         })
 
         // show all available practicals
-        this.modules = this.modules.filter(practicalInTheTable => filterOutPractical(selectedModule, practicalInTheTable))
+        this.modules = this.modules.filter(practicalInTheTable => this.filterOutPractical(selectedModule, practicalInTheTable))
       }
-      this.addChoice(id, subject, code);
+      this.addChoice(selectedModule.id, selectedModule.subject, selectedModule.code);
+      this.testListOfAvailableModules = this.modules;
+      console.log(this.testListOfAvailableModules)
+      // this.testMatchModules()
     },
 //--------------------------------------------------------------------------------------------
 
-    async fetchAllPracticals() {
-      const response = await supabase
-        .from('practicals')
-        .select()
-      this.practicals = response.data;
-    },
     async fetchAllModules() {
       const response = await supabase
         .from('modules')
@@ -147,13 +147,13 @@ TODO: refactor! the functions used for filtering can be extracted to improve rea
       console.log(this.modules)
     },
     addChoice(id, subject, code) {
+      console.log('Hi')
       const choice = {
         id: id,
         subject: subject,
         code: code
       };
       this.choices = [...this.choices, choice]
-      // console.log(this.choices);
     },
 
     /* @requires: practical input and course input, one of which will correspond to the selected module 
@@ -191,12 +191,13 @@ TODO: refactor! the functions used for filtering can be extracted to improve rea
             return (!(rangeCourseDay1.overlaps(rangePracticalDay1) || rangeCourseDay2.overlaps(rangePracticalDay1)) 
             || !(rangeCourseDay1.overlaps(rangePracticalDay2) || rangeCourseDay2.overlaps(rangePracticalDay2)) 
             || !(rangeCourseDay1.overlaps(rangePracticalDay3) || rangeCourseDay2.overlaps(rangePracticalDay3)))
-          }
+          }}},
 
-      
-         
-        }
-    }
+          // needed to extract the list after the selection has been made for testing purposes
+          testMatchModules(){
+            return  this.finalModuleListAfterMatching
+          },
+
 
   }
 }
