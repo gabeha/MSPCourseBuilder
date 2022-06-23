@@ -21,6 +21,7 @@ export default {
     components: { Period },
     methods: {
         getPeriod() {
+            // why 2 and 5 are not handled in the same way?
             if (this.semesterNumber == 1 || this.semesterNumber == 3 || this.semesterNumber == 5) {
                 return 1
             }
