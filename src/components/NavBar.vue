@@ -32,6 +32,11 @@
             <Button @btn-click="toggleHidden()" name="Get Started"></Button>
         </router-link>
       </li>
+      <li v-if="user!=null"><router-link @click="toggleHidden()" to="/logout">log Out</router-link></li>
+      <ul v-else>
+        <li><router-link @click="toggleHidden()" to="/register">Register now</router-link></li>
+        <li><router-link @click="toggleHidden()" to="/login">Log in</router-link></li>
+        </ul>
     </ul>
   </div>
 </div>
@@ -41,6 +46,8 @@
 <script>
 
 import router from '../router.js'
+import  useAuthUser from '../composables/UseAuthUser.js';
+const { isLoggedIn } = useAuthUser()
 
 export default {
     name: 'NavBar',

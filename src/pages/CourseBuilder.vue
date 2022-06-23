@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import { supabase } from "../supabase.js"
+import useSupabase from "../composables/UseSupabase";
+const { supabase } = useSupabase()
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 

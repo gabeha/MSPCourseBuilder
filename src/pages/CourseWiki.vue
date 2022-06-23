@@ -18,8 +18,8 @@
 
 <script>
 import router from '../router.js'
-
-import { supabase } from '../supabase'
+import useSupabase from "../composables/UseSupabase";
+const { supabase } = useSupabase()
 
 export default {
     name: 'CourseWiki',
