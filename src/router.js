@@ -27,11 +27,6 @@ const routes = [
         component: AboutPage 
     },
     {
-      path: "/register",
-      name: "Register",
-      component: () => import("./pages/Register.vue")
-    },
-    {
       path: "/email-confirmation",
       name: "EmailConfirmation",
       component: () => import("./pages/Emailconfirmation.vue")
@@ -51,12 +46,12 @@ const routes = [
     }
    },
     {
-      path: "/me",
-      name: "Me",
+      path: "/dashboard",
+      name: "Dashboard",
       meta: {
           requiresAuth: true
       },
-      component: () => import("./pages/Me.vue")
+      component: () => import("./pages/Dashboard.vue")
     },
     {
       path: "/forgotpassword",
@@ -74,7 +69,7 @@ router.beforeEach((to) => {
   const { isLoggedIn } = useAuthUser();
   if (!isLoggedIn() && to.meta.requiresAuth && !Object.keys(to.query).includes("fromEmail")
   ) {
-    return { name: "Acc" };
+    return { path: "/login" };
   }
 });
 

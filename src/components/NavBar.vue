@@ -1,3 +1,8 @@
+<script setup>
+import  useAuthUser from '../composables/UseAuthUser.js';
+const { user } = useAuthUser()
+</script>
+
 <template>
 <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-800 border-b">
   <div class="container flex flex-wrap justify-between items-center mx-auto">
@@ -32,9 +37,10 @@
             <Button @btn-click="toggleHidden()" name="Get Started"></Button>
         </router-link>
       </li>
-      <li v-if="user!=null"><router-link @click="toggleHidden()" to="/logout">log Out</router-link></li>
+      <ul v-if="user">
+      <li>Hello {{ user.user_metadata.name }}</li>
+      <li ><router-link @click="toggleHidden()" to="/logout">log Out</router-link></li></ul>
       <ul v-else>
-        <li><router-link @click="toggleHidden()" to="/register">Register now</router-link></li>
         <li><router-link @click="toggleHidden()" to="/login">Log in</router-link></li>
         </ul>
     </ul>
@@ -46,8 +52,7 @@
 <script>
 
 import router from '../router.js'
-import  useAuthUser from '../composables/UseAuthUser.js';
-const { isLoggedIn } = useAuthUser()
+
 
 export default {
     name: 'NavBar',
