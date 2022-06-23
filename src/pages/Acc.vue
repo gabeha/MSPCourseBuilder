@@ -15,7 +15,7 @@ const form = ref({
 const handlelogin = async (provider) => {
     try {
         await login(form.value);
-        router.push({ path:'/' });
+        router.push({ path: "/dashboard" });
     } catch (error) {
         alert(error.message)
     }
