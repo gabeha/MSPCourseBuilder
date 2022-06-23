@@ -23,8 +23,9 @@
             :practicals="this.practicals"></ModulesPool>
         <!-- <CourseDisplay class="absolute top-0 r-10-96 w-1/3" :modules="modules" :highlightedModule="infoModule" v-show="showInfo"></CourseDisplay> -->
     </div>
-
-
+    <div>
+    <Manual :choices="choices" />
+  </div>
 </template>
 
 <script>
@@ -140,6 +141,7 @@ export default {
             // console.log(this.modules.subject)
             this.checkSelectedTwoCourses(semester, period);
             // return this.choices
+            console.log(this.choices)
         },
 
         checkSelectedTwoCourses(semester, period) {
