@@ -1,0 +1,84 @@
+    remainingCourseFinder(modules, selectedId){
+      let prevRanges = this.timeRangeFinder(modules[selectedId].subject,this.findModuleTimeslots(modules[selectedId]));
+      let remaining = [];
+      if (modules[selectedId].subject!="PRA"){
+      for (let i = 0; i < 1;i++){
+        if (!this.isSelectedPossible(modules[30].subject, this.findModuleTimeslots(modules[30]), prevRanges))
+          remaining.push([i+1,modules[30].subject,modules[30].code])
+        };
+      }
+      else{
+        for (let i = 0; i < modules.length;i++){
+        if (this.isSelectedPossible(modules[i].subject,this.findModuleTimeslots(modules[i]),prevRanges)&&(modules[i].subject!=="PRA"))
+          remaining.push([i+1,modules[i].subject,modules[i].code])
+        };
+      }
+      console.log(remaining)
+    },
+    timeRangeFinder(subject, times) {
+      const len = times.length;
+      let range = new Array();
+      if (subject === "PRA"){
+        for(let i = 0; i<len;i++){
+          range.push( moment.range(times[i][0], times[i][1]));
+        }
+        return [[range]];
+      }
+      else{
+        for(let i = 0; i<len;i++){
+          range.push([moment.range(times[i][0], times[i][1])]);
+        }
+        return [range];
+      }
+    },
+    isSelectedPossible(subject, times, prevRanges) {
+      const choosing = this.timeRangeFinder(subject,times);
+      //console.log(subject, choosing, prevRanges)
+      let impossible = true;
+      //let num = 0
+      for (let i = 0; i < prevRanges.length; i++) {
+        //console.log(prevRanges.length)
+        let checks = false;
+        for (let j = 0; j < prevRanges[0][i].length;j++){
+          //console.log(prevRanges[i].length)
+          let choosingPossible = true;
+          for (let n = 0; n < choosing.length;n++){
+            //console.log(choosing.length)
+            let choosingChecks = false;
+            for (let m = 0; m < choosing[0][n].length;m++){
+              //num ++;
+              
+
+              choosingChecks = !prevRanges[0][i][j].overlaps(choosing[0][n][m]) || choosingChecks;
+              console.log([choosingChecks,i,j,n,m])
+            }
+            for (let m = 0; m < prevRanges.length;m++){
+              //num ++;
+              
+
+              choosingChecks = !prevRanges[0][i][j].overlaps(choosing[0][n][m]) || choosingChecks;
+              console.log([choosingChecks,i,j,n,m])
+            }
+            choosingPossible = choosingPossible && choosingChecks;
+            //console.log(choosingPossible)
+          }
+          checks = choosingPossible || checks;
+          //console.log(checks)
+          
+        } 
+        impossible = impossible && checks
+        //console.log(impossible)
+      }
+      //console.log(!impossible + " " + num)
+      return !impossible;
+    },
+    findModuleTimeslots(module){
+      let timeslots = [[module.start1,module.end1]]
+      if (module.start2 != null){
+        timeslots.push([module.start2,module.end2])
+      }
+      if (module.start3 != null){
+        timeslots.push([module.start3,module.end3])
+      }
+      return(timeslots)
+    },
