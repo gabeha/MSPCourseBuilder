@@ -310,12 +310,12 @@
 		</div>
 		<div class="items-center px-4 py-3 space-x-6 my-6">
 			<button
-				id="cancel-btn"
+				id="cancel-btn" @click="popupsave=!popupsave"
 				class="px-4 py-2 text-white bg-red-500 rounded-md baseline hover:bg-red-300">
 				Cancel
 			</button>
       <button
-				id="save-btn" @click="getInputValue"
+				id="save-btn" @click="commitButton; popupsave=!popupsave"
 				class="px-4 py-2 text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">
 				Save
 			</button>
@@ -395,39 +395,38 @@ export default {
   },
   methods: {
       
-    getInputValue() {
+    commitButton() {
             // Selecting the input element and get its value 
-            // if (this.inputChecker()){
-            //   this.createOrUpdate()
-            // }
-            // else{
-            //   console.log("HI")
-            // }
-            this.inititalizeData()
-            console.log(this.id)
-            console.log(this.title)
-            console.log(this.subject)
-            console.log(this.code)
-            console.log(this.course_coordinator)
-            console.log(this.contact)
-            console.log(this.pre_requisites)
-            console.log(this.co_requisites)
-            console.log(this.recommended)
-            console.log(this.objectives)
-            console.log(this.description)
-            console.log(this.literature)
-            console.log(this.format)
-            console.log(this.assessment)
-            console.log(this.period)
-            console.log(this.day1)
-            console.log(this.start_time_d1)
-            console.log(this.end_time_d1)
-            console.log(this.day2)
-            console.log(this.start_time_d2)
-            console.log(this.end_time_d2)
-            console.log(this.day3)
-            console.log(this.start_time_d3)
-            console.log(this.end_time_d3)
+            if (this.inputChecker()){
+              this.createOrUpdate()
+            }
+            else{
+              console.log("HI")
+            }
+            // console.log(this.id)
+            // console.log(this.title)
+            // console.log(this.subject)
+            // console.log(this.code)
+            // console.log(this.course_coordinator)
+            // console.log(this.contact)
+            // console.log(this.pre_requisites)
+            // console.log(this.co_requisites)
+            // console.log(this.recommended)
+            // console.log(this.objectives)
+            // console.log(this.description)
+            // console.log(this.literature)
+            // console.log(this.format)
+            // console.log(this.assessment)
+            // console.log(this.period)
+            // console.log(this.day1)
+            // console.log(this.start_time_d1)
+            // console.log(this.end_time_d1)
+            // console.log(this.day2)
+            // console.log(this.start_time_d2)
+            // console.log(this.end_time_d2)
+            // console.log(this.day3)
+            // console.log(this.start_time_d3)
+            // console.log(this.end_time_d3)
       },
     // accesses database and stores all the modules from the table in the modules array
     async retrieveData() {
