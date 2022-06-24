@@ -52,7 +52,7 @@
 
   <!-- Add course button -->
   <div class="flex-col">
-    <button type="button" @click="" class="p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md h-12 w-12 text-center  hover:bg-blue-300"> + </button>
+    <button type="button" @click="popupadd=!popupadd" class="p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md h-12 w-12 text-center  hover:bg-blue-300"> + </button>
   </div>
 </div>
 
@@ -236,17 +236,71 @@
     <button type="button" @click="" class="mt-12 p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">CANCEL</button>
   </div>
   <div class="flex-col">
-    <button type="button" @click="" class="mt-12 p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">DELETE COURSE</button>
+    <button type="button" @click="popupdelete=!popupdelete"  class="mt-12 p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">DELETE COURSE</button>
   </div>
   <div class="flex-col ">
-    <input type="submit" value="SAVE" @click="popup=!popup"  class="mt-12 p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">
+    <input type="submit" value="SAVE" @click="popupsave=!popupsave"  class="mt-12 p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">
   </div>
 </div>
 
 
 <!-- try button -->
 
-<div v-if="popup" class="mx-auto p-5 border w-1/2 h-1/2 shadow-lg rounded-md bg-white fixed mx-auto top-1/4 left-1/4 flex items-center justify-center z-10">
+<!-- new course -->
+
+<div v-if="popupadd" class="mx-auto p-5 border w-1/2 h-1/2 shadow-lg rounded-md bg-white fixed mx-auto top-1/4 left-1/4 flex items-center justify-center z-10">
+	<div class="mt-3 text-center">
+		<h3 class="text-5xl font-medium text-gray-900">A new course will be created</h3>
+		<div class="my-6 px-7 py-3">
+			<p class="text-md text-gray-500">
+				Do you want to continue? All edits will be lost 
+			</p>
+		</div>
+		<div class="items-center px-4 py-3 space-x-6 my-6">
+			<button
+				id="cancel-btn"
+				class="px-4 py-2 text-white bg-red-500 rounded-md baseline hover:bg-red-300">
+				Cancel
+			</button>
+      <button
+				id="save-btn" @click=""
+				class="px-4 py-2 text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">
+				Add course
+			</button>
+		</div>
+	</div>
+</div>
+<div  v-else ></div>
+
+
+<!-- delete -->
+
+<div v-if="popupdelete" class="mx-auto p-5 border w-1/2 h-1/2 shadow-lg rounded-md bg-white fixed mx-auto top-1/4 left-1/4 flex items-center justify-center z-10">
+	<div class="mt-3 text-center">
+		<h3 class="text-5xl font-medium text-gray-900">This course is going to be deleted</h3>
+		<div class="my-6 px-7 py-3">
+			<p class="text-md text-gray-500">
+				Are you sure you want ot delete this course?
+			</p>
+		</div>
+		<div class="items-center px-4 py-3 space-x-6 my-6">
+			<button
+				id="cancel-btn"
+				class="px-4 py-2 text-white bg-red-500 rounded-md baseline hover:bg-red-300">
+				Cancel
+			</button>
+      <button
+				id="save-btn" @click=""
+				class="px-4 py-2 text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">
+				Delete course
+			</button>
+		</div>
+	</div>
+</div>
+<div  v-else ></div>
+
+<!-- save button -->
+<div v-if="popupsave" class="mx-auto p-5 border w-1/2 h-1/2 shadow-lg rounded-md bg-white fixed mx-auto top-1/4 left-1/4 flex items-center justify-center z-10">
 	<div class="mt-3 text-center">
 		<h3 class="text-5xl font-medium text-gray-900">Changes were made</h3>
 		<div class="my-6 px-7 py-3">
@@ -299,9 +353,15 @@ export default {
   
   data() {
     return {
+    popupsave: false,
+    popupdelete: false,
+    popupadd: false,
+
 
       modules: [],
-      popup: false,
+     
+
+
       id: null,
       title: '',
       subject: '',
