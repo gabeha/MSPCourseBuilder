@@ -1,0 +1,391 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css"> 
+    <title> Admin page </title>
+</head>
+
+<body>
+ <!-- Nav bar (anton's)-->
+    <nav class="relative container mx-auto p-2 mb-4">
+            <div class="flex items-center justify-between font-semibold">
+               <!--logo-->
+               <div class="pt-2">
+                <img src="#" alt="" class=""/>
+               </div>
+               <!--Menu items-->
+                <div class="hidden lg:flex lg:space-x-10 xl:space-x-20 ">
+                    <a href="#" class="hover:text-blue-300 text-sm ">Home</a>
+                    <a href="builder.html" class="hover:text-blue-300 text-sm ">Curriculum Planner</a> 
+                    <a href="#" class="hover:text-blue-300 text-sm ">Course Wiki</a>
+                    <a href="#" class="hover:text-blue-300 text-sm ">About Us</a>
+                    <a href="#" class="hover:text-blue-300 text-sm ">Log in</a>  
+                </div>
+                <!--Button--> 
+                <a href="#"
+             class="flex md:block p-3 px-6 pt-2 text-white bg-blue-900 rounded-full baseline hover:bg-blue-300 d"
+             >Get started</a
+             >
+                <!--Hamburger Icon-->
+                <button id="menu-btn" class="block hamburger lg:hidden focus:outline-none">
+                    <span class="hamburger-top"></span>
+                    <span class="hamburger-middle"></span>
+                    <span class="hamburger-bottom"></span>
+                </button>
+            </div>
+                
+                <div class="lg:hidden">
+                    <div id="menu" class="absolute flex-col items-center hidden self-end py-8 mt-10 space-y-6 font-bold bg-white sm:w-auto sm:self-center left-6 right-6 drop-shadow-md">
+                        <a href="#" >Home</a>
+                        <a href="#" >Curriculum Planner</a> 
+                        <a href="#" >Course Wiki</a>
+                        <a href="#" >About Us</a>
+                        <a href="#" >Log in</a> 
+                     </div>
+                 </div>
+    </nav>
+<form>
+
+
+<div class="flex flex-col container items-center mx-auto my-4">
+    <div class="">
+    Here comes course selector thingie
+    </div>
+</div>
+
+<!-- boxes -->
+<div class="flex container ">
+    <!-- col 1 -->
+    <div class="flex flex-col container w-1/3 space-y-3">
+        
+
+        <select v-model="id" v-if="modules !== null" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+            <option disabled value="">Please select a Course</option>
+            <option v-for="m in modules" :key="m.id" :value="m.id">{{m.subject}}{{m.code}}, {{m.period}}, {{m.description.title}} </option>
+          </select>
+
+        <!-- title box -->
+        <label for="title" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Course Title</label>
+        <input type="text" placeholder="Course Title" id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-96 p-2.5 mx-12" required>
+        
+        <div class="flex container">
+            <!-- subject -->
+            <div class="flex container flex-col">
+            
+                <label for="subjects" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Subject</label>
+                <select type="text" name="subject" id="subject" onchange='checkvalue(this.value)' class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+                    <option value="BIO">BIO</option>
+                    <option value="CHE">CHE</option>
+                    <option value="PHY">PHY</option>
+                    <option value="MAT">MAT</option>
+                    <option value="INT">INT</option>
+                    <option value="NEU">NEU</option>
+                    <option value="PRA">PRA</option>
+                    <option value="others">Others</option>
+                </select> 
+                <input type="text" name="subjecto" id="subjecto" style='display:none'class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+                    
+                <script>
+                    function checkvalue(val)
+                    {
+                        if(val==="others")
+                        document.getElementById('subjecto').style.display='block';
+                        else
+                        document.getElementById('subjecto').style.display='none'; 
+                    } 
+                </script>
+            </div>
+
+            <!-- code -->
+            <div class="flex container flex-col">
+                <label for="code" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Code</label>
+                <input type="number" placeholder="Code" id="code" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+    
+            </div>    
+        </div>
+
+        <!-- course coordinator -->
+        <label for="course_coordinator" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Course Coordinator</label>
+        <input type="text" placeholder="course coordinator 1, course coordinator 2, ..." id="course_coordinator" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+
+        <!-- contact (can have multiple emails) -->
+        <label for="contact" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Contact</label>
+        <input type="text" placeholder="email 1, email 2, ..." id="contact" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" multiple required>
+
+        <!-- pre-requisites -->
+        <label for="pre_requisites" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Pre-requisites</label>
+        <input type="text" placeholder="pre-requisite 1, pre-requisite 2, pre-requisite 3, ..." id="pre_requisites" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+
+        <!-- co-requisites -->
+        <label for="co_requisites" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Co-requisites</label>
+        <input type="text" placeholder="co-requisite 1, co-requisite 2, co-requisite 3, ..." id="co_requisites" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+
+        <!-- recommended -->
+        <label for="recommended" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Recommended</label>
+        <input type="text" placeholder="recommended 1, recommended 2, ..." id="recommended" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+    </div>
+
+    <!-- col 2  -->
+    <div class="flex flex-col container w-1/3 space-y-3">
+      <!-- objectives -->
+        <label for="objectives" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Objectives</label>
+        <input type="text" placeholder="Enter Objective" name="objectives" id="objectives" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+       
+
+        <!-- add text box -->
+        <script>
+            var id = 0;
+            function add_field()
+            {
+              var total_text=document.getElementsByClassName("input_text");
+              total_text=total_text.length+1;
+              document.getElementById("field_div").innerHTML=document.getElementById("field_div").innerHTML+
+              "<p id='input_text"+total_text+id"_wrapper'><input type='text' class='mt-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12' id='input_text"+total_text+"' placeholder='Enter Objective'><input type='button' value='Remove' class='mt-3 p-2 text-xs mx-12 text-white bg-blue-900 rounded-md baseline hover:bg-blue-300' onclick=remove_field('input_text"+total_text+"');></p>";
+            }
+            function remove_field(id)
+            {
+              document.getElementById(id+"_wrapper").innerHTML="";
+            }
+            </script>
+
+        <div id="wrapper">
+            <div id="field_div">
+            <input type="button" value="Add Objective" onclick="add_field();" class="mt-3 p-2 text-xs mx-12 text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">
+            
+            </div>
+        </div>
+
+   
+
+
+        <!-- course description -->
+        
+        <div>
+            <label for="description" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Course Description</label>
+            <textarea type="text" name="description" id="description" cols="30" rows="1000" class="h-96 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+            </textarea>
+        </div>
+
+    </div>
+
+    <!-- col 3 -->
+    <div class="flex flex-col container w-1/3 space-y-3">
+         <!-- literature -->
+        <label for="literature" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Literature</label>
+        <input type="text" placeholder="literature 1, literature 2, ..." id="literature" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+
+        <!-- Format -->
+        <label for="format" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Format</label>
+        <input type="text" placeholder="lectures, tutorials, ..." id="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+
+        <!-- Assessment -->
+        <label for="assessment" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Assessment</label>
+        <input type="text" placeholder="midterm, final, ..." id="assessment" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 p-2.5 mx-12" required>
+
+        <!-- Periods -->
+        <label for="period" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Period</label>
+        <select id="period" name="period" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-96 p-2.5 mx-12" required>
+            <option value="1">P1</option>
+            <option value="2">P2</option>
+            <option value="4">P4</option>
+            <option value="5">P5</option>
+        </select>
+
+        <div class="flex container">  <!-- Day 1 -->
+            <div class="flex container flex-col w-1/3">
+                <label for="day_1" class="block mb-2 text-sm font-medium text-gray-900 mx-12 w-1/3">Day 1</label>
+                <select id="day_1" name="day_1" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+                  <option value="Mon">Monday</option>
+                  <option value="Tue">Tuesday</option>
+                  <option value="Wed">Wednesday</option>
+                  <option value="Thu">Thursday</option>
+                  <option value="Fri">Friday</option>
+                </select>
+            </div>
+            <div class="flex container flex-col w-1/3">
+                <!-- start time d1 -->
+                <label for="start_time_d1" class="block mb-2 text-sm font-medium text-gray-900 mx-12"> Start Day 1</label>
+                <input type="time" id="start_time_d1" placeholder="08:30" min="08:00" max="20:00" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+            </div>
+            <div class="flex container flex-col w-1/3">
+                <!-- end time d1 -->
+                <label for="end_time_d1" class="block mb-2 text-sm font-medium text-gray-900 mx-12"> End Day 1</label>
+                <input type="time" id="end_time_d1" placeholder="08:30" min="08:00" max="20:00" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+            </div>
+        </div>
+        <div class="flex container">  <!-- Day 2 -->
+            <div class="flex container flex-col w-1/3">
+                <label for="day_2" class="block mb-2 text-sm font-medium text-gray-900 mx-12 w-1/3">Day 2</label>
+                <select id="day_2" name="day_2" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+                    <option value="Mon">Monday</option>
+                    <option value="Tue">Tuesday</option>
+                    <option value="Wed">Wednesday</option>
+                    <option value="Thu">Thursday</option>
+                    <option value="Fri">Friday</option>
+                    <option value="None">None</option>
+                </select>                
+            </div>
+            <div class="flex container flex-col w-1/3">
+                <!-- start time d2 -->
+                <label for="start_time_d2" class="block mb-2 text-sm font-medium text-gray-900 mx-12"> Start Day 2</label>
+                <input type="time" id="start_time_d2" placeholder="08:30" min="08:00" max="20:00" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12">
+            </div>
+            <div class="flex container flex-col w-1/3">
+                <!-- end time d2 -->
+                <label for="end_time_d2" class="block mb-2 text-sm font-medium text-gray-900 mx-12"> End Day 2</label>
+                <input type="time" id="end_time_d2" placeholder="08:30" min="08:00" max="20:00" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12">
+            </div>
+        </div>
+        <div class="flex container">  <!-- Day 3 -->
+            <div class="flex container flex-col w-1/3">
+                <label for="day_3" class="block mb-2 text-sm font-medium text-gray-900 mx-12">Day 3</label>
+                <select id="day_3" name="day_3" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12" required>
+                    <option value="Mon">Monday</option>
+                    <option value="Tue">Tuesday</option>
+                    <option value="Wed">Wednesday</option>
+                    <option value="Thu">Thursday</option>
+                    <option value="Fri">Friday</option>
+                    <option value="None">None</option>
+                </select>               
+            </div>
+            <div class="flex container flex-col w-1/3">
+                <!-- start time d3 -->
+                <label for="start_time_d3" class="block mb-2 text-sm font-medium text-gray-900 mx-12"> Start Day 3</label>
+                <input type="time" id="start_time_d3" placeholder="08:30" min="08:00" max="20:00" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12">
+            </div>
+            <div class="flex container flex-col w-1/3">
+                <!-- end time d3 -->
+                <label for="end_time_d3" class="block mb-2 text-sm font-medium text-gray-900 mx-12"> End Day 3</label>
+                <input type="time" id="end_time_d3" placeholder="08:30" min="08:00" max="20:00" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-3/4 p-2.5 mx-12">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container flex justify-around">
+    <div class="flex-col">
+        <button type="button" onclick="" class="mt-12 p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">CANCEL</button>
+    </div>
+    <div class="flex-col">
+        <button type="button" onclick="" class="mt-12 p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">DELETE COURSE</button>
+    </div>
+    <div class="flex-col ">
+        <input type="submit" value="SAVE" onclick="getInputValue()" class="mt-12 p-3 mx-4 mx-auto text-white bg-blue-900 rounded-md baseline hover:bg-blue-300">
+    </div>
+</div>
+    
+
+    <script>
+        function getInputValue(){
+            // Selecting the input element and get its value 
+            
+            var title = document.getElementById("title").value;
+            var subject = document.getElementById("subject").value;
+            var subjecto = document.getElementById("subjecto").value;  
+            // subjecto is for when others is selected
+            var code = document.getElementById("code").value;
+            var course_coordinator = document.getElementById("course_coordinator").value;
+            var contact = document.getElementById("contact").value;
+            var pre_requisites = document.getElementById("pre_requisites").value;
+            var co_requisites = document.getElementById("co_requisites").value;
+            var recommended = document.getElementById("recommended").value;
+            var objectives = document.getElementById("objectives").value;
+            var description = document.getElementById("description").value;
+            var literature = document.getElementById("literature").value;
+            var format = document.getElementById("format").value;
+            var assessment = document.getElementById("assessment").value;
+            var period = document.getElementById("period").value;
+            var day_1 = document.getElementById("day_1").value;
+            var start_time_d1 = document.getElementById("start_time_d1").value;
+            var end_time_d1 = document.getElementById("end_time_d1").value;
+            var day_2 = document.getElementById("day_2").value;
+            var start_time_d2 = document.getElementById("start_time_d2").value;
+            var end_time_d2 = document.getElementById("end_time_d2").value;
+            var day_3 = document.getElementById("day_3").value;
+            var start_time_d3 = document.getElementById("start_time_d3").value;
+            var end_time_d3 = document.getElementById("end_time_d3").value;
+                       
+          
+            console.log(title);
+            console.log(subject);
+            console.log(subjecto);
+            console.log(code);
+            console.log(course_coordinator);
+            console.log(contact);
+            console.log(pre_requisites);
+            console.log(co_requisites);
+            console.log(recommended);
+            console.log(objectives);
+            console.log(description);
+            console.log(literature);
+            console.log(format);
+            console.log(assessment);
+            console.log(period);
+            console.log(day_1);
+            console.log(start_time_d1);
+            console.log(end_time_d1);
+            console.log(day_2);
+            console.log(start_time_d2);
+            console.log(end_time_d2);
+            console.log(day_3);
+            console.log(start_time_d3);
+            console.log(end_time_d3);
+
+        }
+    </script>
+
+
+
+
+
+
+
+</form>
+
+ <!-- Footer -->
+    <footer class="bg-sky-600 mt-4" >
+        <div class="container flex justify-evenly mx-auto pt-4">
+            <!-- logo + description -->
+            <div class="flex flex-col items-left justify-evenly space-y-0 mx-4">
+                <div>
+                    <img src="img/msp-logo.jpeg" class="h-20" alt="">
+                </div>
+            </div>
+            <!-- description -->
+            <div class="flex justify-around mx-4">
+                <div class="text-white text-sm py-3">
+                    <p> This website was built and designed by MSP students for </p>
+                    <p> MSP students in the context of a research project. </p>
+                    <p class="italic"> The one and only, MSPCourseBuilder team </p> 🙂
+                </div>
+            </div>
+            <!-- links col 1 -->
+            <div class="flex justify-around mx-4">
+                <div class="flex flex-col space-y-2 text-white">
+                    <a href="#" class="hover:text-sky-800">Home</a>
+                    <a href="#" class="hover:text-sky-800">Course Builder</a>
+                    <a href="#" class="hover:text-sky-800">Wiki</a>
+                </div>
+            </div>
+            <!-- links col 2 -->
+            <div class="flex justify-around mx-4">
+                <div class="flex flex-col space-y-2 text-white">
+                    <a href="#" class="hover:text-sky-800">About Us</a>
+                    <a href="#" class="hover:text-sky-800">How to Get Started</a>
+                    <a href="#" class="hover:text-sky-800">FAQ</a>
+                </div>
+            </div>
+        </div>
+        <div class="mx-auto text-center text-white pb-2">
+            <!-- copyright -->
+            Copyright &copy; 2022. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+
+</html>

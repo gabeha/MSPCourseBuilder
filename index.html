@@ -1,0 +1,645 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css"> 
+    <title> Course Builder</title>
+</head>
+
+<body>
+    <!-- Nav bar (anton's)-->
+        <nav class="relative container mx-auto p-2">
+            <div class="flex items-center justify-between font-semibold">
+               <!--logo-->
+               <div class="pt-2">
+                <img src="images/favicon.png" alt="" class=""/>
+               </div>
+               <!--Menu items-->
+                <div class="hidden lg:flex lg:space-x-10 xl:space-x-20 ">
+                    <a href="#" class="hover:text-blue-300 text-sm ">Home</a>
+                    <a href="builder.html" class="hover:text-blue-300 text-sm ">Curriculum Planner</a> 
+                    <a href="#" class="hover:text-blue-300 text-sm ">Course Wiki</a>
+                    <a href="#" class="hover:text-blue-300 text-sm ">About Us</a>
+                    <a href="#" class="hover:text-blue-300 text-sm ">Log in</a>  
+                </div>
+                <!--Button--> 
+                <a href="#"
+             class="flex md:block p-3 px-6 pt-2 text-white bg-blue-900 rounded-full baseline hover:bg-blue-300 d"
+             >Get started</a
+             >
+                <!--Hamburger Icon-->
+                <button id="menu-btn" class="block hamburger lg:hidden focus:outline-none">
+                    <span class="hamburger-top"></span>
+                    <span class="hamburger-middle"></span>
+                    <span class="hamburger-bottom"></span>
+                </button>
+            </div>
+                
+                <div class="lg:hidden">
+                    <div id="menu" class="absolute flex-col items-center hidden self-end py-8 mt-10 space-y-6 font-bold bg-white sm:w-auto sm:self-center left-6 right-6 drop-shadow-md">
+                        <a href="#" >Home</a>
+                        <a href="#" >Curriculum Planner</a> 
+                        <a href="#" >Course Wiki</a>
+                        <a href="#" >About Us</a>
+                        <a href="#" >Log in</a> 
+                     </div>
+                 </div>
+        </nav>
+
+    <!-- NEW POPUP TRY -->
+        <div class="popup bg-gray-100 drop-shadow-2xl">
+            <button id="close">&times;</button>
+            <h1 class="font-bold text-2xl text-red-600 ">WARNING!</h1>
+            <p class="text-center text-sky-700 font-bold text-1xl">
+                KEEP IN MIND THE PRE- AND CO-REQUISITES!!!
+            </p>
+        </div>
+        <!--Script-->
+        <script>
+            window.addEventListener("load", function(){
+                setTimeout(
+                    function open(event){
+                        document.querySelector(".popup").style.display = "block";
+                    },
+                    1000
+                )
+            });
+            document.querySelector("#close").addEventListener("click", function(){
+                document.querySelector(".popup").style.display = "none";
+            });
+        </script>
+    <!-- END OF POPUP TRY -->
+
+    <!-- Semester blocks -->
+    <section id="semester overview">
+        <div class="container flex object-center mx-auto space-evenly py-6">
+            <!-- semester 1 -->
+            <div class="inline-grid grid-col-1 grid-row-3 space-y-2 mx-auto space-evenly place-items-center">
+                <div class="text-sky-800 font-bold">
+                    Semester 1
+                </div>
+                <button
+                    class="bg-sky-800 hover:bg-sky-600 focus:ring-2 focus:ring-red-900 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    CORE
+                    <!-- focus ring color to be changed and not put on core/btr -->
+                </button>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    CORE
+                </button>
+            </div>
+            <!-- semester 2 -->
+            <div class="inline-grid grid-col-1 grid-row-3 space-y-2 mx-auto space-evenly place-items-center">
+                <div class="text-sky-800 font-bold object-center">
+                    Semester 2
+                </div>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    Period 4
+                </button>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    Period 5
+                </button>
+            </div>
+            <!-- semester 3 -->
+            <div class="inline-grid grid-col-1 grid-row-3 space-y-2 mx-auto space-evenly place-items-center">
+                <div class="text-sky-800 font-bold">
+                    Semester 3
+                </div>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    Period 1
+                </button>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    Period 2
+                </button>
+            </div>
+            <!-- semester 4 -->
+            <div class="inline-grid grid-col-1 grid-row-3 space-y-2 mx-auto space-evenly place-items-center">
+                <div class="text-sky-800 font-bold">
+                    Semester 4
+                </div>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    Period 4
+                </button>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    Period 5
+                </button>
+            </div>
+            <!-- semester 5 -->
+            <div class="inline-grid grid-col-1 grid-row-3 space-y-2 mx-auto space-evenly place-items-center">
+                <div class="text-sky-800 font-bold">
+                    Semester 5
+                </div>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    Period 1
+                </button>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    Period 2
+                </button>
+            </div>
+            <!-- semester 6 -->
+            <div class="inline-grid grid-col-1 grid-row-3 space-y-2 mx-auto space-evenly place-items-center">
+                <div class="text-sky-800 font-bold">
+                    Semester 6
+                </div>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    BTR
+                </button>
+                <button class="bg-sky-800 hover:bg-sky-600 rounded-full text-white font-bold px-6 py-4 md:w-48 w-auto">
+                    BTR
+                </button>
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <!-- Course section -->
+    <section id="course overview">
+        <div class="container flex object-center mx-auto space-evenly py-8 ">
+            <!-- physics 1 -->
+            <div
+                class="inline-grid grid-col-1 grid-row-6 space-y-3 mx-auto text-center space-evenly place-items-center">
+                <div class="bg-blue-800 hover:bg-sky-500 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PHY2010
+                </div>
+                <div class="bg-blue-800 hover:bg-sky-500 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PHY2010
+                </div>
+                <div class="bg-blue-800 hover:bg-sky-500 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PHY2010
+                </div>
+                <div class="bg-blue-800 hover:bg-sky-500 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PHY2010
+                </div>
+                <div class="bg-blue-800 hover:bg-sky-500 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PHY2010
+                </div>
+                <div class="bg-white rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PHY2010
+                </div>
+            </div>
+
+            <!-- biology -->
+            <div
+                class="inline-grid grid-col-1 grid-row-6 space-y-3 mx-auto text-center space-evenly place-items-center">
+                <div class="bg-green-500 hover:bg-green-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    BIO2007
+                </div>
+                <div class="bg-green-500 hover:bg-green-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    BIO2007
+                </div>
+                <div class="bg-green-500 hover:bg-green-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    BIO2007
+                </div>
+                <div class="bg-green-500 hover:bg-green-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    BIO2007
+                </div>
+                <div class="bg-green-500 hover:bg-green-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    BIO2007
+                </div>
+                <div class="bg-green-500 hover:bg-green-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    BIO2007
+                </div>
+            </div>
+
+
+            <!-- chemistry -->
+            <div
+                class="inline-grid grid-col-1 grid-row-6 space-y-3 mx-auto text-center space-evenly place-items-center">
+                <div class="bg-blue-300 hover:bg-blue-100 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    CHE2001
+                <!-- slide over -->
+                    <button class="bg-blue-300 text-white rounded-md px-3 py-2 hover:bg-blue-100 transition"
+                    onclick="toggleSlideover('panel')">i</button>
+            
+                <div id="panel">
+                        <div onclick="toggleSlideover()"></div>
+
+
+                        <div id="slideover-container" class="w-full h-full fixed inset-0 invisible">
+                          <div onclick="toggleSlideover()" id="slideover-bg" class="w-full h-full duration-500 ease-out transition-all inset-0 absolute bg-gray-900 opacity-0"></div>
+                          <div onclick="toggleSlideover()" id="slideover" class="w-96 bg-white h-full absolute right-0 duration-300 ease-out transition-all translate-x-full">
+                              <div class="absolute cursor-pointer text-gray-600 top-0 w-8 h-8 flex items-center justify-center right-0 mt-5 mr-5">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                              </div>
+
+                              <div>
+                                <h1 class="flex items-center justify-center text-gray-600 mt-6 text-4xl">Information</h1>
+                                <h2 class="flex items-center justify-center text-sky-600 font-bold text-2xl py-2">Organic Chemistry</h2>
+                                <h2 class="flex items-center justify-center text-gray-600 font-bold">CHE2001</h2>
+                                
+                                <div class=" py-2 text-2xl text-left font-bold text-sky-900 rounded-md ml-4">
+                                    <h2 class="">Pre-requisites</h2>
+                                    <ul class="list-disc list-inside text-sky-700 text-sm">
+                                        <li>CHE1001</li>
+                                    </ul>
+                                </div>
+                    
+                                <div class="mx-auto py-2 text-2xl text-left font-bold text-sky-900 rounded-md ml-4">
+                                    <h2>Co-requisites</h2>
+                                    <ul class="list-disc list-inside text-left text-sky-700 text-sm">
+                                        <li>Chemical Synthesis</li>
+                                    </ul>
+                                </div>
+            
+                                <div class="mx-auto py-2 text-2xl text-left font-bold text-sky-900 rounded-md ml-4">
+                                    <h2>Course Coordinator</h2>
+                                    <p class="ml-4 mx-auto text-left text-sky-700 text-sm"> Period 1: Dr. Matt Baker, Faculty of Health, Medicine and Life Sciences, MERLN <br> Period 4: Dr. Hanne Diliën, Faculty of 
+                                        Science and Engineering, Maastricht Science Programme.</p>
+                                        <br>
+                                    <h2>Course Coordinator Email</h2>
+                                    <p class="ml-4 mx-auto text-left text-sky-700 text-sm"> 
+                                            m.baker@maastrichtuniversity.nl 
+                                        <br> hanne.dilien@maastrichtuniversity.nl
+                                    </p>
+                                </div>
+            
+                                <div class="my-6 mx-32">
+                                    <a href="#" class=" p-3 px-6 py-3 text-white bg-sky-700
+                                    rounded-full baseline hover:bg-sky-500 ">Read More</a>
+                                </div>
+            
+                            </div>
+                    
+                          </div>
+                        </div>
+                      </div>
+                    
+
+
+
+                    <script type="text/javascript">
+                    function toggleSlideover(){
+                        document.getElementById('slideover-container').classList.toggle('invisible');
+                        document.getElementById('slideover-bg').classList.toggle('opacity-0');
+                        document.getElementById('slideover-bg').classList.toggle('opacity-50');
+                        document.getElementById('slideover').classList.toggle('translate-x-full');
+                    }
+                    </script>
+
+
+                </div>
+                <div class="bg-blue-300 hover:bg-blue-100 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    CHE2006
+                </div>
+                <div class="bg-blue-300 hover:bg-blue-100 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    CHE2006
+                </div>
+                <div class="bg-blue-300 hover:bg-blue-100 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    CHE2006
+                </div>
+                <div class="bg-blue-300 hover:bg-blue-100 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    CHE2006
+                </div>
+                <div class="bg-blue-300 hover:bg-blue-100 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    CHE2006
+                </div>
+            </div>
+
+
+            <!-- Math -->
+            <div
+                class="inline-grid grid-col-1 grid-row-6 space-y-3 mx-auto text-center space-evenly place-items-center">
+                <div class="bg-orange-600 hover:bg-orange-400 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    MAT2006
+                </div>
+                <div class="bg-orange-600 hover:bg-orange-400 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    MAT2006
+                </div>
+                <div class="bg-orange-600 hover:bg-orange-400 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    MAT2006
+                </div>
+                <div class="bg-orange-600 hover:bg-orange-400 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    MAT2006
+                </div>
+                <div class="bg-orange-600 hover:bg-orange-400 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    MAT2006
+                </div>
+                <div class="bg-orange-600 hover:bg-orange-400 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    MAT2006
+                </div>
+            </div>
+
+
+            <!-- interdisciplinary -->
+            <div
+                class="inline-grid grid-col-1 grid-row-6 space-y-3 mx-auto text-center space-evenly place-items-center">
+                <div class="bg-violet-400 hover:bg-violet-200 rounded-full text-white  px-3 py-3 md:w-40 w-auto">
+                    INT3006
+                </div>
+                <div class="bg-violet-400 hover:bg-violet-200 rounded-full text-white  px-3 py-3 md:w-40 w-auto">
+                    INT3006
+                </div>
+                <div class="bg-violet-400 hover:bg-violet-200 rounded-full text-white  px-3 py-3 md:w-40 w-auto">
+                    INT3006
+                </div>
+                <div class="bg-violet-400 hover:bg-violet-200 rounded-full text-white  px-3 py-3 md:w-40 w-auto">
+                    INT3006
+                </div>
+                <div class="bg-violet-400 hover:bg-violet-200 rounded-full text-white  px-3 py-3 md:w-40 w-auto">
+                    INT3006
+                </div>
+                <div class="bg-violet-400 hover:bg-violet-200 rounded-full text-white  px-3 py-3 md:w-40 w-auto">
+                    INT3006
+                </div>
+            </div>
+
+
+            <!-- neuroscience -->
+            <div
+                class="inline-grid grid-col-1 grid-row-6 space-y-2 mx-auto text-center space-evenly place-items-center">
+                <div class="bg-rose-400 hover:bg-rose-200 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    NEU1006
+                </div>
+                <div class="bg-rose-400 hover:bg-rose-200 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    NEU1006
+                </div>
+                <div class="bg-rose-400 hover:bg-rose-200 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    NEU1006
+                </div>
+                <div class="bg-rose-400 hover:bg-rose-200 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    NEU1006
+                </div>
+                <div class="bg-rose-400 hover:bg-rose-200 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    NEU1006
+                </div>
+                <div class="bg-rose-400 hover:bg-rose-200 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    NEU1006
+                </div>
+            </div>
+
+            <!-- practical  -->
+            <div
+                class="inline-grid grid-col-1 grid-row-6 space-y-2 mx-auto text-center space-evenly place-items-center">
+                <div class="bg-stone-500 hover:bg-stone-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PRA1001
+                </div>
+                <div class="bg-stone-500 hover:bg-stone-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PRA1001
+                </div>
+                <div class="bg-stone-500 hover:bg-stone-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PRA1001
+                </div>
+                <div class="bg-stone-500 hover:bg-stone-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PRA1001
+                </div>
+                <div class="bg-stone-500 hover:bg-stone-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PRA1001
+                </div>
+                <div class="bg-stone-500 hover:bg-stone-300 rounded-full text-white px-3 py-3 md:w-40 w-auto">
+                    PRA1001
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- help button modal-->
+<div>
+    <button onclick="openModal()" class="bg-sky-700 text-white hover:bg-sky-500 font-bold uppercase text-sm px-3 py-3 rounded-full shadow hover:shadow-lg outline- focus:outline-none mr-1 mb-1 ease-linear
+    transition-all duration-150 flex justify-end fixed bottom-10 right-10">?</button>
+</div>
+
+<div class="main-modal fixed w-full h-full inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
+    style="background: rgba(0,0,0,.7);">
+
+    <div
+        class="border modal-container bg-white w-6/12 h-5/6 max-h-full mx-auto rounded shadow-lg z-50 overflow-y-auto">        
+        <div class=" p-4 w-full max-w-7xl max-h-full md:h-auto">
+
+            <!--Title-->
+            <div class="flex justify-between items-center pb-3 p-2 border-b border-slate-200 rounded-t">
+                <p class="text-4xl font-bold text-sky-700 mx-auto">How to use the course builder</p>
+                <div class="modal-close cursor-pointer z-50">
+                    <svg class="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="25" height="25"
+                        viewbox="0 0 18 18">
+                        <path
+                            d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+
+            <!--Body-->
+            <div class="max-h-5/6 max-w-max p-4">
+                <div class="my-4 text-gray-800 text-lg">
+                <img src= "img/Capture d’écran 2022-06-21 à 10.33.47.png" class= "max-w-full h-64 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6"> 1) First click on the semester that you would like to select courses for.</p>
+
+                <img src= "img/kelly's-cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6"> 2) Next select the period.</p>
+
+                <img src= "img/zoe's_cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6">3) You will now be able to see all courses you can take in this period.</p>
+
+                <img src= "img/kelly's-cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6">4) From the course selection, click on a course or practical that you would like to take. </p>
+
+                <img src= "img/zoe's_cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6">5) Click on the i next to the course or practical to get a short overview. The 'read more' button will direct you to the wiki page for more information. </p>
+
+                <img src= "img/kelly's-cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6">6) After you have selected a module, the remaining options of courses and practical will be displayed. </p>
+
+                <img src= "img/zoe's_cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6">7) Continue by completing your selection of another course and one practical. </p>
+
+                <img src= "img/kelly's-cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6">8) The courses that you have selected will now be visible at the top of the page under the period and semester that you intially clicked on. </p>
+
+                <img src= "img/zoe's_cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6">9) You can also switch between periods and semesters by clicking on the ... </p>
+
+                <img src= "img/kelly's-cat.jpeg" class= "max-w-full h-48 border-2 border-sky-500 mx-auto" alt="..." />
+                <p class="mb-6">10)  </p>
+                
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const modal = document.querySelector('.main-modal');
+    const closeButton = document.querySelectorAll('.modal-close');
+    console.log(closeButton)
+
+    const modalClose = () => {
+        modal.classList.remove('fadeIn');
+        modal.classList.add('fadeOut');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 500);
+    }
+
+    const openModal = () => {
+        modal.classList.remove('fadeOut');
+        modal.classList.add('fadeIn');
+        modal.style.display = 'flex';
+    }
+
+    for (let i = 0; i < closeButton.length; i++) {
+        const elements = closeButton[i];
+        elements.onclick = (e) => modalClose();
+        modal.style.display = 'none';
+        window.onclick = function (event) {
+            if (event.target == modal) modalClose();
+        }
+    }
+</script>
+
+<style>
+    .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+
+    .animated.faster {
+        -webkit-animation-duration: 500ms;
+        animation-duration: 500ms;
+    }
+
+    .fadeIn {
+        -webkit-animation-name: fadeIn;
+        animation-name: fadeIn;
+    }
+
+    .fadeOut {
+        -webkit-animation-name: fadeOut;
+        animation-name: fadeOut;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+</style>
+
+
+
+
+
+
+<!-- mehaa panel test
+<div class="w-screen h-screen flex items-center justify-center">
+    <div onclick="toggleSlideover()" class="cursor-pointer px-5 py-2 text-sm border text-gray-500 hover:bg-gray-100 rounded border-gray-300">i</div>
+    <div id="slideover-container" class="w-full h-full fixed inset-0 invisible">
+      <div onclick="toggleSlideover()" id="slideover-bg" class="w-full h-full duration-500 ease-out transition-all inset-0 absolute bg-gray-900 opacity-0"></div>
+      <div onclick="toggleSlideover()" id="slideover" class="w-96 bg-white h-full absolute right-0 duration-300 ease-out transition-all translate-x-full">
+          <div class="absolute cursor-pointer text-gray-600 top-0 w-8 h-8 flex items-center justify-center right-0 mt-5 mr-5">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+function toggleSlideover(){
+    document.getElementById('slideover-container').classList.toggle('invisible');
+    document.getElementById('slideover-bg').classList.toggle('opacity-0');
+    document.getElementById('slideover-bg').classList.toggle('opacity-50');
+    document.getElementById('slideover').classList.toggle('translate-x-full');
+}
+</script>
+
+
+<-- slide over test zoé -->
+<!--  
+<div class="w-screen h-screen flex items-center justify-center">
+    <div onclick="toggleSlideover()"
+        class="px-5 py-2 cursor-pointer hoover:bg-gray-100 border border-gray-300 rounder text-gray-600">
+        i
+    </div>
+    <div id="slideover-container" class="fixed inset-0 h-full w-full invisible">
+        <div onclick="toggleSlideover()" id="slideover-bg"
+            class="absolute duration-500 ease-out transition-all inset-0 w-full h-full bg-gray-100 opacity-0"></div>
+        <div id="slideover"
+            class="absolute duration-500 ease-out transition-all w-96 h-full bg-white right-0 top-0 translate-x-full">
+            <div onclick="toggleSlideover()"
+                class="h-10 w-10 text-gray-600 cursor-pointer flex items-center justify-center absolute top-0 right-0 mt-5 mr-5">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </div>
+        </div>
+        <div>INFO</div>
+    </div>
+
+    <script>
+        function toggleSlideover() {
+            document.getElementById('slideover-container').classList.toggle('invisible');
+            document.getElementById('slideover-bg').classList.toggle('opacity-0');
+            document.getElementById('slideover-bg').classList.toggle('opacity-50');
+            document.getElementById('slideover').classList.toggle('translate-x-full');
+        }
+    </script>
+</div> --> 
+
+    
+
+    <!-- Footer -->
+    <footer class="bg-sky-600 mt-4" >
+        <div class="container flex justify-evenly mx-auto pt-4">
+            <!-- logo + description -->
+            <div class="flex flex-col items-left justify-evenly space-y-0 mx-4">
+                <div>
+                    <img src="img/msp-logo.jpeg" class="h-20" alt="">
+                </div>
+            </div>
+            <!-- description -->
+            <div class="flex justify-around mx-4">
+                <div class="text-white text-sm py-3">
+                    <p> This website was built and designed by MSP students for </p>
+                    <p> MSP students in the context of a research project. </p>
+                    <p class="italic"> The one and only, MSPCourseBuilder team </p> 🙂
+                </div>
+            </div>
+            <!-- links col 1 -->
+            <div class="flex justify-around mx-4">
+                <div class="flex flex-col space-y-2 text-white">
+                    <a href="#" class="hover:text-sky-800">Home</a>
+                    <a href="#" class="hover:text-sky-800">Course Builder</a>
+                    <a href="#" class="hover:text-sky-800">Wiki</a>
+                </div>
+            </div>
+            <!-- links col 2 -->
+            <div class="flex justify-around mx-4">
+                <div class="flex flex-col space-y-2 text-white">
+                    <a href="#" class="hover:text-sky-800">About Us</a>
+                    <a href="#" class="hover:text-sky-800">How to Get Started</a>
+                    <a href="#" class="hover:text-sky-800">FAQ</a>
+                </div>
+            </div>
+        </div>
+        <div class="mx-auto text-center text-white pb-2">
+            <!-- copyright -->
+            Copyright &copy; 2022. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+
+</html>
