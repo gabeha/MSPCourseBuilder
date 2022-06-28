@@ -1,0 +1,85 @@
+*,
+*:before,
+*:after{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.popup{
+    width: 450px;
+    padding: 15px 20px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+    border-radius: 8px;
+    display: none;
+    text-align: center;
+}
+.popup button{
+    display: block;
+    margin:  0 0 20px auto;
+    background-color: transparent;
+    font-size: 30px;
+    color: #c5c5c5;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+.popup p{
+    margin: 20px 0;
+    line-height: 25px;
+}
+
+
+/* scroll bar */
+
+body {
+    width: 100%;
+}
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+}
+
+.wrapper:hover { 
+    background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+    background-size: 1800% 1800%;
+
+  -webkit-animation: rainbow 5s ease infinite;
+  -z-animation: rainbow 5s ease infinite;
+  -o-animation: rainbow 5s ease infinite;
+    animation: rainbow 5s ease infinite;}
+  
+  @-webkit-keyframes rainbow {
+      0%{background-position:0% 82%}
+      50%{background-position:100% 19%}
+      100%{background-position:0% 82%}
+  }
+  @-moz-keyframes rainbow {
+      0%{background-position:0% 82%}
+      50%{background-position:100% 19%}
+      100%{background-position:0% 82%}
+  }
+  @-o-keyframes rainbow {
+      0%{background-position:0% 82%}
+      50%{background-position:100% 19%}
+      100%{background-position:0% 82%}
+  }
+  @keyframes rainbow { 
+      0%{background-position:0% 82%}
+      50%{background-position:100% 19%}
+      100%{background-position:0% 82%}
+  }
+
+  .hide {
+    display: none;
+  }
+  
+  .myDIV:hover + .hide {
+    display: block;
+    color: red;
+  }
