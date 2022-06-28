@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
+    <title>About Us</title>
+</head>
+<body>
+
+<!-- scroll bar -->
+<div class="scroll-progress bg-sky-500 w-0 h-1" id="scroll-progress">
+</div>
+<script>
+    const scrollProgressElement = document.querySelector("#scroll-progress");
+    
+    function scrollProgress() {
+        const totalheightOfWebPage = document.body.scrollHeight;
+        const currentDistanceFromTop = document.documentElement.scrollTop;
+
+        const windowHeight = document.documentElement.clientHeight;
+
+        const scrolledPercentage = 
+        (currentDistanceFromTop / (totalheightOfWebPage - windowHeight)) * 100;
+    scrollProgressElement.style.width = Math.round(scrolledPercentage) + "%";
+}
+
+document.addEventListener("scroll", scrollProgress);
+
+</script>
+
+      <!--navbar-->
+      <nav class="relative container mx-auto p-2">
+        <div class="flex items-center justify-between font-semibold">
+           <!--logo-->
+           <div class="pt-2">
+            <img src="images/favicon.png" alt="" class=""/>
+           </div>
+           <!--Menu items-->
+            <div class="hidden lg:flex lg:space-x-10 xl:space-x-20 ">
+                <a href="#" class="hover:text-blue-300 text-sm ">Home</a>
+                <a href="builder.html" class="hover:text-blue-300 text-sm ">Curriculum Planner</a> 
+                <a href="#" class="hover:text-blue-300 text-sm ">Course Wiki</a>
+                <a href="#" class="hover:text-blue-300 text-sm ">About Us</a>
+                <a href="#" class="hover:text-blue-300 text-sm ">Log in</a>  
+            </div>
+            <!--Button--> 
+            <a href="#"
+         class="flex md:block p-3 px-6 pt-2 text-white bg-blue-900 rounded-full baseline hover:bg-blue-300 d"
+         >Get started</a
+         >
+            <!--Hamburger Icon-->
+            <button id="menu-btn" class="block hamburger lg:hidden focus:outline-none">
+                <span class="hamburger-top"></span>
+                <span class="hamburger-middle"></span>
+                <span class="hamburger-bottom"></span>
+            </button>
+        </div>
+            
+            <div class="lg:hidden">
+                <div id="menu" class="absolute flex-col items-center hidden self-end py-8 mt-10 space-y-6 font-bold bg-white sm:w-auto sm:self-center left-6 right-6 drop-shadow-md">
+                    <a href="#" >Home</a>
+                    <a href="#" >Curriculum Planner</a> 
+                    <a href="#" >Course Wiki</a>
+                    <a href="#" >About Us</a>
+                    <a href="#" >Log in</a> 
+                 </div>
+             </div>
+    </nav>
+<!-- progress bar -->
+ 
+
+
+<!-- text -->
+<div class="max-w-6xl px-5 mx-auto text-center">
+    <!-- heading -->
+    <h2 class="text-4xl font-bold text-center text-sky-700 my-6">
+        THE PEOPLE BEHIND THE PROJECT
+    </h2>
+    <p class="text-center text-gray-600 mb-14">
+        We are 9 passionate students who want to make a difference within the MSP community. This website <br> was created in the context of a research project. It was designed and created by MSP students for their MSPeers.
+    </p>
+<!-- row 1 -->
+    <div class="container flex my-10 mx-auto">
+        <div class="container flex space-x-4 justify-around">
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200 wrapper">
+                <img src="img/msp-logo.jpeg" class="h-40 -mt-14" alt=""/>
+                <h5 class="text-lg font-bold">Gabriel Hauss</h5>
+               <p class="text-sm font-bold text-gray-500">
+                   The logical guy
+               </p>
+                <p class="text-sm text-gray-500">
+                One of our student leaders of this project, he focuses on Physics at MSP. Gabe worked on the logic and functionality behind our website. 
+                </p> 
+            </div>
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200">
+                <img src="img/msp-logo.jpeg" class="h-40 -mt-14" alt=""/>
+                <h5 class="text-lg font-bold">Sanne Aarts</h5>
+                <p class="text-sm opacity-0 font-bold p-0 text-gray-500 hover:opacity-100"> 
+                    The hover lover and cookie maker
+                </p>
+                <p class="text-sm text-gray-500">
+                One of our student leaders of this project, she focuses on Physics at MSP. Sanne worked on the functionality and the design of our tool.
+                </p> 
+            </div>
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200">
+                <img src="img/msp-logo.jpeg" class="h-40 -mt-14" alt=""/>
+                <h5 class="text-lg font-bold">Akiya Hoken</h5>
+                <a href="https://www.ikea.com/se/sv/p/huvudroll-kycklingkoettbullar-fryst-90486455/" class="text-sm font-bold text-gray-500"> Akiya.com </a>
+                <p class="text-sm text-gray-500">
+                Another of our student leaders of this project, he focused on Maths and Neuroscience at MSP. Akiya worked on the design of our website.
+                </p> 
+            </div>
+        </div>
+    </div>
+<!-- row 2 -->
+    <div class="container flex my-10 mx-auto">
+        <div class="container flex space-x-4 justify-around">
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200">
+                <img src="img/zoe's_cat.jpeg" class="h-40 -mt-14" alt=""/>
+                <div class="myDIV text-lg font-bold"> Zoé Ducarne </div>
+                <div class="hide">
+                    <img src="img/zoe's_cat.jpeg" class="h-40 -mt-14" alt=""/>
+                </div>
+                <p class="text-sm font-bold text-gray-500">
+                 npm run build: The bio student  
+                </p>
+                <p class="text-sm text-gray-500">
+                She focuses on small Biology at MSP. Zoé worked on the design of our website.
+                </p>
+            </div>
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200">
+                <img src="img/msp-logo.jpeg" class="h-40 -mt-14" alt=""/>
+                <h5 class="text-lg font-bold">Mehaa Prabakar</h5>
+                <p class="text-sm font-bold text-gray-500">
+                 The one struggling with button sizing   
+                </p>
+                <p class="text-sm text-gray-500">
+               She focuses on Maths and Biology at MSP. Mehaa worked on the design of our website.
+                </p> 
+            </div>
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200">
+                <img src="img/msp-logo.jpeg" class="h-40 -mt-14" alt=""/>
+                <h5 class="text-lg font-bold">Jens Hieronymus</h5>
+                <p class="text-sm font-bold text-gray-500">
+                  The guy who cannot print 
+                </p>
+                <p class="text-sm text-gray-500">
+                He focuses on Physics at MSP. Jens worked on the logic and functionality behind our website.
+                </p> 
+            </div>
+        </div>
+    </div>
+<!-- row 3 -->
+    <div class="container flex my-10 mx-auto">
+        <div class="container flex space-x-4 justify-around">
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200">
+                <img src="img/kelly's-cat.jpeg" class="h-40 -mt-14" alt=""/>
+                
+                <audio id="sound1" src="/mp3/akiyakelly.mp4" preload="auto"></audio>
+                <button class="text-lg font-bold" onclick="document.getElementById('sound1').play();"> Kelly Wolters</button>
+                
+
+                <p class="text-sm font-bold text-gray-500">
+                < div> The one and only < /div>
+                </p>
+                <p class="text-sm text-gray-500">
+                She focuses on Astrophysics at MSP. Kelly worked on the design of our website.
+                </p> 
+            </div>
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200">
+                <img src="img/msp-logo.jpeg" class="h-40 -mt-14" alt=""/>
+                <h5 class="text-lg font-bold">Anton Schmidt</h5>
+                <p class="text-sm font-bold text-gray-500">
+                The hamburger menu guy
+                </p>
+                <p class="text-sm text-gray-500">
+                He focuses on Physics at MSP. Anton worked on the design of our website.
+                </p> 
+            </div>
+            <div class="flex flex-col items-center p-6 space-y-6 rounded-lg bg-sky-100 w-80 hover:bg-sky-200">
+                <img src="img/liza's_cat.jpeg" class="h-40 -mt-14" alt=""/>
+                <h5 class="text-lg font-bold">Elizaveta Zavialova</h5>
+                <p class="text-sm font-bold text-gray-500">
+                   The one who would like some fries
+                </p>
+                <p class="text-sm text-gray-500">
+               She focuses on Neuroscience and Maths at MSP. Elizaveta worked on the logic and functionality behind our website.
+                </p> 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-gray-200">
+        <div class="container flex flex-col px-6 py-0 mx-auto space-y-12 md:py-12 md:flex-row md:space-y-0 items-center justify-center">
+            <div class="text-black font-bold text-lg items-center justify-center flex">
+                <div class="hidden md:flex lg:space-x-10 xl:space-x-20 ">
+                    <a href="#" class="hover:text-blue-300">Home</a>
+                    <a href="#" class="hover:text-blue-300">Curriculum Planner</a> 
+                    <a href="#" class="hover:text-blue-300">Course Wiki</a>
+                    <a href="#" class="hover:text-blue-300">About Us</a>
+                    <a href="#" class="hover:text-blue-300">Log in</a>  
+                </div>
+            </div>
+        </div>
+        <div class="mx-auto text-center text-gray-600 pb-2">
+            <!-- copyright -->
+            Copyright &copy; 2022. All Rights Reserved.
+        </div>
+    </footer>
+</body>
